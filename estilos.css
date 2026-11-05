@@ -96,7 +96,7 @@ h1 {
 .icono { position: relative; display: grid; place-items: center; width: 24px; height: 24px; flex: none; }
 .icono svg { width: 24px; height: 24px; }
 .onda { position: absolute; inset: -7px; border-radius: 50%; border: 2px solid var(--noche); opacity: 0; pointer-events: none; }
-.buscar:not(.usado) .onda { animation: invitar 6.5s var(--ease-out) 2.5s infinite; }
+.buscar:not(.usado) .onda { animation: invitar 6.5s var(--ease-out) 2.5s 3; } /* tres invitaciones y descansa */
 .buscar.quieta .onda { animation-play-state: paused; }
 @keyframes invitar { 0% { opacity: 0; scale: .7; } 5% { opacity: .5; } 24%, 100% { opacity: 0; scale: 2.1; } }
 .buscar[aria-busy='true'] { cursor: progress; background: #e7ad45; }
@@ -138,8 +138,10 @@ h1 {
 .ver-todas {
   padding: 0 14px; min-height: 40px; border-radius: 999px; cursor: pointer;
   border: 1px solid var(--linea); background: var(--noche-alta); color: var(--mantel); font-weight: 650; font-size: .95rem;
-  transition: transform .16s var(--ease-out), border-color .2s ease;
+  opacity: 0; translate: 0 6px; pointer-events: none;
+  transition: transform .16s var(--ease-out), border-color .2s ease, opacity .2s var(--ease-out), translate .2s var(--ease-out);
 }
+.ver-todas.visible { opacity: 1; translate: 0 0; pointer-events: auto; }
 .ver-todas:active { transform: scale(.97); }
 
 /* La vela de cada sede. Se enciende de oeste a este (retraso que se acorta, como una ola) al aparecer el mapa. */
@@ -320,6 +322,7 @@ h2 { margin: 0; font: 400 clamp(2rem, 8.5vw, 2.6rem)/1.02 var(--display); font-v
 
 /* ---------- Controles del riel de sedes (solo celular y tableta vertical) ---------- */
 .solo-riel { display: none; }
+.solo-ancho { display: inline; }
 /* «Copiar» junto a la dirección y «Guardar» junto al teléfono (en el riel; en pantalla ancha están en la ficha) */
 .chip {
   display: none; position: relative; align-items: center; gap: 5px; height: 30px; margin-left: 6px; padding: 0 10px;
@@ -380,7 +383,7 @@ h2 { margin: 0; font: 400 clamp(2rem, 8.5vw, 2.6rem)/1.02 var(--display); font-v
 .mesa-boton { order: 3; width: auto; min-width: 250px; }
 
 /* La escena empieza a dibujarse apenas asoma (nunca una pantalla vacía) y ocupa justo lo que se ve (dvh) */
-.mesa.viva { height: 260svh; }
+.mesa.viva { height: 220svh; }
 .mesa.viva .mesa-escena {
   position: sticky; top: 0; height: 100vh; height: 100dvh; padding-block: 16px 22px; gap: 12px; background: var(--noche);
   align-content: stretch; grid-template-rows: minmax(0, 1fr) auto auto;
@@ -409,6 +412,10 @@ h2 { margin: 0; font: 400 clamp(2rem, 8.5vw, 2.6rem)/1.02 var(--display); font-v
 /* ---------- Celular y tableta vertical: modo app (mapa grande y sedes que se deslizan con el pulgar) ---------- */
 @media (max-width: 959px) {
   .solo-riel { display: inline; }
+  .solo-ancho { display: none; }
+  /* en la tarjeta, el nombre y los teléfonos siguen siendo tocables pero sin subrayado: menos ruido */
+  #lista .ver { text-decoration: none; }
+  #lista .tels a { text-decoration: none; }
   .cabecera { padding-top: 16px; }
   .logo { height: 26px; }
   .portada { padding-top: 22px; padding-bottom: 16px; }

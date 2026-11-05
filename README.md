@@ -37,7 +37,7 @@ responde a algo (un toque, un cambio de estado, un lugar en el mapa), un solo mo
 - **Velas que se encienden:** al aparecer el mapa, de oeste a este, con esperas que se acortan (una ola, no un
   metrónomo); cada llama nace de una chispa desenfocada, nunca desde cero.
 - **Ficha de la sede:** al tocar una vela o el nombre de una sede sube una hoja (curva de cajón tipo iOS, 500 ms) con
-  cómo llegar, WhatsApp, llamar, copiar la dirección y guardar el contacto (archivo .vcf). Se cierra con la X, con Esc,
+  cómo llegar, WhatsApp, llamar y copiar la dirección. Se cierra con la X, con Esc,
   tocando el mapa o arrastrándola hacia abajo: basta un gesto rápido (velocidad > 0,11 px/ms), y hacia arriba ofrece
   fricción. En pantalla ancha es una tarjeta sobre el mapa y el mapa deja la vela en la parte libre.
 - **La más cercana:** la lista se reordena (cada sede viaja a su puesto; la duración crece con la distancia), el mapa
@@ -56,7 +56,7 @@ congestionada. Por eso lo útil va primero y el movimiento con scroll va despué
 
 - **Arriba:** título en una línea, «Buscar la sede más cercana», mapa grande y las sedes como tarjetas que se deslizan
   con el pulgar (una a la vez, con «1 de 8» y flechas). Al deslizar, el mapa vuela a la vela de esa sede; tocar una vela
-  trae su tarjeta. «Copiar» va junto a la dirección y «Guardar» junto al teléfono. En la tableta vertical se ven dos
+  trae su tarjeta. «Copiar» va junto a la dirección. En la tableta vertical se ven dos
   tarjetas; desde 960 px de ancho vuelve la lista con el mapa fijo y la ficha.
 - **La mesa** (`#mesa`): el único momento de scroll. Mientras se baja, la escena queda fija: la mesa se dibuja, se
   encienden 8 velas (una por sede) y el fondo pasa del azul frío de la ciudad al ámbar del banquete, con dos frases de la
@@ -72,3 +72,13 @@ Railway construye el `Dockerfile` (Caddy sirve los archivos en el puerto `PORT`,
 seguridad). Cada cambio en la rama `main` de GitHub se publica solo; también se puede subir a mano con `railway up`.
 
 Probar en local: `python3 -m http.server 8941` en esta carpeta y abrir `http://127.0.0.1:8941/`.
+
+## Revisión de UX (5-nov, con los criterios de las skills)
+
+Se quitó lo que no ayudaba a encontrar o contactar una sede: «Guardar contacto» (bajar un archivo .vcf confunde en el
+celular y WhatsApp ya guarda el contacto), el subrayado de nombres y teléfonos en las tarjetas, los créditos del mapa
+abiertos (quedan plegados en la «i») y el botón «Ver todas las sedes» cuando el mapa ya las muestra todas (aparece al
+moverlo o al volar a una sede). La invitación del botón principal late tres veces y descansa (en la sala oscura nada debe
+latir sin fin). El primer pantallazo trae un dato concreto («ICT tiene 8 sedes en Cúcuta y Villa del Rosario»), la nota de
+privacidad es más corta y la ayuda depende del modo («Desliza para ver cada sede» / «Toca un nombre para verlo en el
+mapa»). La mesa pide menos scroll (220svh). Falta de contenido, no de diseño: los horarios de reunión de cada sede.

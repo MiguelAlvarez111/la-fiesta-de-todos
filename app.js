@@ -104,34 +104,8 @@
     }
     avisar('Dirección copiada');
   }
-  function guardarContacto(s) {
-    const dir = s.direccion;
-    const tels = [...s.li.querySelectorAll('.tels a[href^="tel:"]')].map((a) => a.getAttribute('href').slice(4));
-    const limpio = (t) => t.replace(/[,;\\]/g, (m) => `\\${m}`);
-    const vcard = [
-      'BEGIN:VCARD', 'VERSION:3.0',
-      `N:;${limpio(`ICT ${s.nombre}`)};;;`,
-      `FN:${limpio(`ICT ${s.nombre}`)}`,
-      'ORG:ICT - Cruzada Estudiantil y Profesional de Colombia',
-      ...tels.map((t) => `TEL;TYPE=CELL:${t}`),
-      `ADR;TYPE=WORK:;;${limpio(dir)};;Norte de Santander;;Colombia`,
-      `URL:${URL_PAGINA}`,
-      'NOTE:Sede de ICT. Información de La Fiesta de Todos.',
-      'END:VCARD',
-    ].join('\r\n');
-    const enlace = document.createElement('a');
-    enlace.href = URL.createObjectURL(new Blob([vcard], { type: 'text/vcard' }));
-    enlace.download = `ICT ${s.nombre}.vcf`;
-    document.body.append(enlace);
-    enlace.click();
-    enlace.remove();
-    setTimeout(() => URL.revokeObjectURL(enlace.href), 4000);
-    avisar('Contacto descargado: ábrelo para guardarlo');
-  }
-
-  // En el riel, «Copiar» va junto a la dirección y «Guardar» junto al teléfono: cada acción al lado de lo que usa.
+  // En el riel, «Copiar» va junto a la dirección: la acción al lado de lo que usa.
   const ICONO_COPIAR = $('#copiar')?.querySelector('svg')?.outerHTML ?? '';
-  const ICONO_CONTACTO = $('#contacto')?.querySelector('svg')?.outerHTML ?? '';
   sedes.forEach((s) => {
     const chip = (icono, texto, etiqueta, accion) => {
       const b = document.createElement('button');
@@ -144,8 +118,6 @@
       return b;
     };
     s.li.querySelector('.direccion')?.append(chip(ICONO_COPIAR, 'Copiar', `Copiar la dirección de ${s.nombre}`, copiarDireccion));
-    const tels = s.li.querySelector('.tels');
-    if (tels?.querySelector('a')) tels.append(chip(ICONO_CONTACTO, 'Guardar', `Guardar el contacto de ${s.nombre}`, guardarContacto));
   });
 
   /* ---------- Mapa (MapLibre: vectorial, nítido en cualquier pantalla; estilo propio en /mapa/estilo.json) ---------- */
@@ -209,6 +181,11 @@
     mapa.addControl(new ml.NavigationControl({ showCompass: false }), 'top-left');
     // créditos del mapa: abajo en el celular; arriba en pantalla ancha, donde abajo va la ficha
     mapa.addControl(new ml.AttributionControl({ compact: true }), ancho.matches ? 'top-right' : 'bottom-right');
+    mapa.once('load', () => { // plegados al cargar: menos ruido; siguen a un toque en la «i»
+      const creditos = mapa.getContainer().querySelector('.maplibregl-ctrl-attrib');
+      creditos?.classList.remove('maplibregl-compact-show');
+      creditos?.removeAttribute('open');
+    });
 
     // Las velas se encienden de oeste a este; cada espera es más corta que la anterior (una ola, no un metrónomo).
     const oesteAEste = [...sedes].sort((a, b) => a.punto[1] - b.punto[1]);
@@ -272,7 +249,10 @@
           e.stopPropagation();
           ficha.cerrar();
           encuadrar(limitesSedes());
+          verTodasVisible(false);
         });
+        botonVerTodas = b;
+        verTodasVisible(false);
         caja.append(b);
         return caja;
       }
@@ -281,7 +261,18 @@
     }
     mapa.addControl(new VerTodas(), 'bottom-left');
     mapa.on('click', () => ficha.cerrar());
+    mapa.on('dragstart', () => verTodasVisible(true));
+    mapa.on('zoomstart', (e) => { if (e.originalEvent) verTodasVisible(true); });
     new ResizeObserver(() => mapa.resize()).observe(mapa.getContainer());
+  }
+
+  // «Ver todas las sedes» aparece solo cuando el mapa ya no las muestra todas (al moverlo o al volar a una sede).
+  let botonVerTodas = null;
+  function verTodasVisible(si) {
+    if (!botonVerTodas) return;
+    botonVerTodas.classList.toggle('visible', si);
+    botonVerTodas.tabIndex = si ? 0 : -1;
+    botonVerTodas.toggleAttribute('aria-hidden', !si);
   }
 
   function encuadrar(caja, animar = true) {
@@ -327,6 +318,7 @@
     marcarVela(s);
     if (volar && mapa) {
       mapa.flyTo({ center: lngLat(s.punto), zoom: Math.max(mapa.getZoom(), 14), duration: duracion(600) });
+      verTodasVisible(true);
     }
   }
 
@@ -449,7 +441,6 @@
       if (e.key === 'Escape' && actual) cerrar({ devolverFoco: true });
     });
     $('#copiar').addEventListener('click', () => { if (actual) copiarDireccion(actual); });
-    $('#contacto').addEventListener('click', () => { if (actual) guardarContacto(actual); });
 
     return { el, abrir, cerrar };
   })();
@@ -479,6 +470,7 @@
         center: lngLat(s.punto), zoom: Math.max(mapa.getZoom(), 15), offset: [-(380 + 48) / 2, 0], duration: duracion(800),
       });
       alLlegar(() => aLaVista(s));
+      verTodasVisible(true);
     }
     ficha.abrir(s, { foco: desde === 'lista', disparador });
   }
@@ -608,6 +600,7 @@
       dibujarCamino(yo, primera.punto);
       if (!enRiel()) setTimeout(() => ficha.abrir(primera), reducido.matches ? 0 : 380);
     });
+    verTodasVisible(true);
     mapa.fitBounds(limites([yo, primera.punto]), {
       // en pantalla ancha queda libre la columna de la ficha
       // en el celular, margen para el nombre que aparece sobre la vela
