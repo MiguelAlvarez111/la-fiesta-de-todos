@@ -4,8 +4,7 @@
    - en el celular (modo app): las sedes son tarjetas que se deslizan con el pulgar y el mapa vuela a la vela de cada una;
      en pantalla ancha: lista a la izquierda y ficha de la sede sobre el mapa;
    - la sede más cercana: la lista se reordena, aparece un camino de luz desde ti y se resalta su tarjeta o su ficha;
-   - copiar la dirección, guardar el contacto y compartir, con un aviso breve;
-   - la mesa: el momento de scroll (la mesa se dibuja, ocho velas se encienden, el fondo pasa de frío a cálido).
+   - copiar la dirección y compartir, con un aviso breve.
    La ubicación nunca sale del teléfono. Con «reducir movimiento» nada se desplaza: solo fundidos. */
 (() => {
   'use strict';
@@ -622,10 +621,6 @@
   }
 
   botonBuscar.addEventListener('click', buscar);
-  $('#buscar-mesa')?.addEventListener('click', () => {
-    desplazar(enRiel() ? marcoMapa : $('.portada'));
-    buscar();
-  });
 
   // La invitación del botón descansa cuando el botón no se ve o la pestaña está oculta.
   if ('IntersectionObserver' in window) {
@@ -634,57 +629,6 @@
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') botonBuscar.classList.add('quieta');
   });
-
-  /* ---------- La mesa: momento de scroll ---------- */
-  function prepararMesa() {
-    const mesa = $('#mesa');
-    if (!mesa || reducido.matches) return; // sin movimiento se queda terminada y quieta
-    mesa.classList.add('viva');
-    const escena = mesa.querySelector('.mesa-escena');
-    const luz = mesa.querySelector('.mesa-luz');
-    const dibujo = mesa.querySelector('svg');
-    const velas = [...mesa.querySelectorAll('.mesa-velas li')];
-    const linea1 = mesa.querySelector('[data-tramo="1"]');
-    const linea2 = mesa.querySelector('[data-tramo="2"]');
-    const final = [mesa.querySelector('.mesa-final'), mesa.querySelector('.mesa-boton')];
-    const frio = [7, 20, 48];
-    const calido = [36, 19, 10];
-    const suavizar = (t) => t * t * (3 - 2 * t);
-    let pedido = false;
-    let visible = false;
-
-    const pintar = () => {
-      pedido = false;
-      // El avance empieza cuando la escena asoma (su borde superior a 3/4 de la pantalla), no cuando ya llenó la
-      // pantalla: así nunca se ve una escena vacía. Termina cuando la escena se suelta.
-      const r = mesa.getBoundingClientRect();
-      const alto = window.innerHeight;
-      const p = entre((alto * 0.75 - r.top) / Math.max(1, r.height - alto * 0.25));
-      dibujo.style.setProperty('--trazo', entre(p / 0.16).toFixed(3));
-      dibujo.style.setProperty('--aparece', entre((p - 0.06) / 0.14).toFixed(3));
-      velas.forEach((v, i) => v.classList.toggle('encendida', p >= 0.2 + i * 0.06));
-      linea1.classList.toggle('visible', p < 0.36);
-      linea2.classList.toggle('visible', p >= 0.38 && p < 0.68);
-      final.forEach((el) => el.classList.toggle('visible', p >= 0.7));
-      mesa.classList.toggle('final', p >= 0.7);
-      const t = suavizar(entre((p - 0.1) / 0.6));
-      escena.style.backgroundColor = `rgb(${frio.map((c, k) => Math.round(c + (calido[k] - c) * t)).join(',')})`;
-      luz.style.opacity = entre((p - 0.25) / 0.5).toFixed(3);
-    };
-    const pedir = () => {
-      if (!pedido) {
-        pedido = true;
-        requestAnimationFrame(pintar);
-      }
-    };
-    new IntersectionObserver(([e]) => {
-      visible = e.isIntersecting;
-      if (visible) pedir();
-    }).observe(mesa);
-    addEventListener('scroll', () => { if (visible) pedir(); }, { passive: true });
-    addEventListener('resize', pedir);
-    pintar();
-  }
 
   /* ---------- Compartir ---------- */
   const botonCompartir = $('#compartir');
@@ -709,5 +653,4 @@
 
   crearMapa();
   prepararRiel();
-  prepararMesa();
 })();

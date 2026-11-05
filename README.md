@@ -54,19 +54,15 @@ responde a algo (un toque, un cambio de estado, un lugar en el mapa), un solo mo
 ## Celular y tableta (modo app)
 
 Decisión del 5-nov: la página se usa sobre todo en el celular, a veces en plena obra, con pocos segundos y señal
-congestionada. Por eso lo útil va primero y el movimiento con scroll va después, sin contar el final de la obra.
+congestionada. Por eso es directa: título, buscar la más cercana, mapa y tarjetas; nada cuenta el final de la obra.
 
 - **Arriba:** título en una línea, «Buscar la sede más cercana», mapa grande y las sedes como tarjetas que se deslizan
   con el pulgar (una a la vez, con «1 de 8» y flechas). Al deslizar, el mapa vuela a la vela de esa sede; tocar una vela
   trae su tarjeta. «Copiar» va junto a la dirección. En la tableta vertical se ven dos
   tarjetas; desde 960 px de ancho vuelve la lista con el mapa fijo y la ficha.
-- **La mesa** (`#mesa`): el único momento de scroll. Mientras se baja, la escena queda fija: la mesa se dibuja, se
-  encienden 8 velas (una por sede) y el fondo pasa del azul frío de la ciudad al ámbar del banquete, con dos frases de la
-  bienvenida del evento, hasta «Hay un lugar para ti» y el botón «Encontrar mi sede». Es dibujo (SVG y CSS), no video.
-  Sin JavaScript o con «reducir movimiento» se ve terminada y quieta.
-- Después de la mesa siguen «Más sedes en Norte de Santander» y «¿Vives en otra ciudad?». Una sección con fotos de la
-  obra («Revive la noche») se probó y se quitó el 5-nov a pedido de Miguel: no hacían falta tantas imágenes (queda en el
-  historial de git, commit 0d06d54).
+- Después de las tarjetas siguen «Más sedes en Norte de Santander» y «¿Vives en otra ciudad?». Se probaron y se quitaron
+  el 5-nov, a pedido de Miguel, una galería de fotos de la obra («Revive la noche», commit 0d06d54) y un momento de scroll
+  con una mesa dibujada que se encendía (commits 0d06d54 a 1609aa2): no se leía como mesa y la página queda más directa.
 
 ## Publicación
 
@@ -83,4 +79,4 @@ abiertos (quedan plegados en la «i») y el botón «Ver todas las sedes» cuand
 moverlo o al volar a una sede). La invitación del botón principal late tres veces y descansa (en la sala oscura nada debe
 latir sin fin). El primer pantallazo trae un dato concreto («ICT tiene 8 sedes en Cúcuta y Villa del Rosario»), la nota de
 privacidad es más corta y la ayuda depende del modo («Desliza para ver cada sede» / «Toca un nombre para verlo en el
-mapa»). La mesa pide menos scroll (220svh). Falta de contenido, no de diseño: los horarios de reunión de cada sede.
+mapa»). Falta de contenido, no de diseño: los horarios de reunión de cada sede.
