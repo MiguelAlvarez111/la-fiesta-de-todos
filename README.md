@@ -22,8 +22,10 @@ vectoriales gratuitas de OpenFreeMap (`tiles.openfreemap.org`, datos de OpenStre
 para que se vea nítido en celulares de alta resolución (el anterior, de imágenes, se veía borroso en el iPhone); el estilo
 es el «positron» de OpenFreeMap con los azules de la página (`scratchpad`: `genera_estilo.py`, colores por capa). Sin
 WebGL el mapa se oculta y la lista de sedes funciona igual. La lista de sedes está escrita en `index.html` y funciona aunque el mapa no cargue;
-`app.js` agrega el mapa, la sede más cercana y el botón de compartir. La ubicación del visitante se usa solo en su
-teléfono: no hay cookies, analítica ni envío de datos.
+`app.js` agrega el mapa, la sede más cercana y el botón de compartir. La ubicación del visitante se usa en su teléfono
+para medir distancias y mostrarla en el mapa; no se guarda ni se envía, y no hay cookies ni analítica. Como el mapa pide
+a OpenFreeMap las calles de la zona que muestra, al buscar la más cercana el acercamiento se detiene en zoom 14 (un
+sector de varios km) para que esas peticiones no revelen la cuadra de la persona.
 
 Para cambiar una sede, editar su bloque `<li class="sede" …>` en `index.html` (nombre, `data-lat`/`data-lon`,
 dirección, teléfonos y enlaces).

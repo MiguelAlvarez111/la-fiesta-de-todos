@@ -605,7 +605,9 @@
       // en pantalla ancha queda libre la columna de la ficha
       // en el celular, margen para el nombre que aparece sobre la vela
       padding: ancho.matches ? { top: 80, bottom: 80, left: 80, right: 80 + 428 } : { top: 80, bottom: 60, left: 80, right: 80 },
-      maxZoom: 16,
+      // Privacidad: el mapa pide a OpenFreeMap las calles de la zona que muestra. Si se acercara hasta la cuadra, esa
+      // petición revelaría dónde está la persona; con zoom 14 como máximo solo se ve un sector amplio (varios km).
+      maxZoom: 14,
       duration: duracion(900),
     });
   }
