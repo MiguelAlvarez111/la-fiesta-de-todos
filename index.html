@@ -33,8 +33,8 @@
 
   <main>
     <section class="portada" aria-labelledby="titulo">
-      <h1 id="titulo">La Fiesta<br>de Todos</h1>
-      <p class="entrada">La mesa está servida y hay un lugar para ti. Busca la sede de ICT más cerca de tu casa y escríbeles para saber cuándo se reúnen.</p>
+      <h1 id="titulo">La Fiesta <br>de Todos</h1>
+      <p class="entrada">Encuentra la sede de ICT más cerca de ti y escríbeles para saber cuándo se reúnen.</p>
       <button class="buscar" id="buscar" type="button">
         <span class="icono" aria-hidden="true"><span class="onda"></span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.6" fill="currentColor"/><path d="M12 1.5v3.5M12 19v3.5M1.5 12H5M19 12h3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
         <span>Buscar la sede más cercana</span>
@@ -47,9 +47,20 @@
       <p class="aviso-mapa" id="aviso-mapa" hidden>Usa dos dedos para mover el mapa</p>
     </div>
 
-    <section class="seccion" id="sedes" aria-labelledby="titulo-sedes">
-      <h2 id="titulo-sedes">8 sedes en Cúcuta y Villa del Rosario</h2>
-      <p class="ayuda">Toca el nombre de una sede para verla en el mapa.</p>
+    <section class="seccion sedes-seccion" id="sedes" aria-labelledby="titulo-sedes">
+      <div class="sedes-cabeza">
+        <h2 id="titulo-sedes">8 sedes en Cúcuta y Villa del Rosario</h2>
+        <div class="riel-controles" id="riel-controles" hidden>
+          <button class="riel-boton" id="riel-ant" type="button" aria-label="Sede anterior">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6 8.5 12l6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <span class="riel-cuenta" id="riel-cuenta">1 de 8</span>
+          <button class="riel-boton" id="riel-sig" type="button" aria-label="Sede siguiente">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+      <p class="ayuda"><span class="solo-riel">Desliza para ver cada sede. </span>Toca su nombre para verla en el mapa.</p>
       <ol class="sedes" id="lista">
       <li class="sede" id="san-martin" data-nombre="San Martín" data-lat="7.90041" data-lon="-72.47022" style="--i:0">
         <h3><button class="ver" type="button" aria-label="Ver San Martín en el mapa">San Martín</button></h3>
@@ -108,6 +119,81 @@
         <div class="acciones"><a class="accion accion-ir" href="https://www.google.com/maps/search/?api=1&amp;query=Carrera+8+%23+2N-42%2C+barrio+Santander%2C+Villa+del+Rosario%2C+Norte+de+Santander" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 21.5 12 12 21.5 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 14.5v-3h5.5M12.5 9.5l2 2-2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Cómo llegar</a><a class="accion" href="https://wa.me/573206803629?text=Hola%2C+vengo+de+La+Fiesta+de+Todos+y+quiero+saber+cu%C3%A1ndo+se+re%C3%BAnen+en+la+sede+Villa+del+Rosario." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1.2-3.6A8 8 0 1 1 8.4 18.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.2 8.6c.3-.5.8-.5 1-.1l.7 1.5c.1.3 0 .6-.2.8l-.4.4c.5 1.1 1.4 2 2.5 2.5l.4-.4c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7-.1 1-.9.6-2 .7-3 .2a8 8 0 0 1-3.4-3.4c-.5-1-.4-2.1.2-3z" fill="currentColor"/></svg>WhatsApp</a><a class="accion" href="tel:+573206803629"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4.1-2 1.3a11 11 0 0 0 6.5 6.5l1.3-2 4.1 1.4v2.6c0 1.1-.9 2-2 2A16.5 16.5 0 0 1 4.6 5.5c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Llamar</a></div>
       </li>
       </ol>
+    </section>
+
+    <!-- Revive la noche: se muestra sola desde el 30-nov-2026 (antes contaría el final de la obra); ?revive=1 la deja ver antes -->
+    <section class="seccion revive" id="revive" aria-labelledby="titulo-revive" hidden>
+      <h2 id="titulo-revive">Revive la noche</h2>
+      <p class="ayuda">Las escenas que acompañaron La Fiesta de Todos en la pantalla.</p>
+      <ol class="escenas">
+        <li class="escena">
+          <figure class="escena-foto"><img src="/img/noche/ciudad.webp" alt="La ciudad de neón: una calle de noche con tiendas iluminadas y pantallas" width="1200" height="900" loading="lazy" decoding="async"></figure>
+          <h3>La ciudad que corre</h3>
+          <p>Una ciudad acelerada celebra la Navidad entre compras y pantallas, y olvida a quién se celebra.</p>
+        </li>
+        <li class="escena">
+          <figure class="escena-foto"><img src="/img/noche/banquete.webp" alt="El gran banquete: un salón dorado con la mesa servida y luz de velas" width="1200" height="900" loading="lazy" decoding="async"></figure>
+          <h3>La Fiesta de Todos</h3>
+          <p>Una mesa servida para todos en la noche de la celebración.</p>
+        </li>
+        <li class="escena">
+          <figure class="escena-foto"><img src="/img/noche/orquesta.webp" alt="La orquesta toca en el salón dorado del banquete" width="1200" height="900" loading="lazy" decoding="async"></figure>
+          <h3>La música</h3>
+          <p>La orquesta y las luces siguen el ritmo de la canción del banquete.</p>
+        </li>
+        <li class="escena">
+          <figure class="escena-foto"><img src="/img/noche/puerta.webp" alt="La puerta se abre en la nieve y una silueta llega en medio de la luz dorada" width="1200" height="900" loading="lazy" decoding="async"></figure>
+          <h3>La puerta se abre</h3>
+          <p>Llega el anfitrión de la fiesta.</p>
+        </li>
+        <li class="escena">
+          <figure class="escena-foto"><img src="/img/noche/belen.webp" alt="Belén de noche bajo un cielo estrellado" width="1200" height="900" loading="lazy" decoding="async"></figure>
+          <h3>El pesebre</h3>
+          <p>Belén de noche: el cumpleaños que celebramos.</p>
+        </li>
+        <li class="escena">
+          <figure class="escena-foto"><img src="/img/noche/cielo.webp" alt="Un cielo luminoso entre nubes doradas" width="1200" height="900" loading="lazy" decoding="async"></figure>
+          <h3>Los ángeles</h3>
+          <p>El cielo se abre para la coreografía de los ángeles.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- La mesa: el momento de scroll. Sin JavaScript o con «reducir movimiento» se ve terminada, quieta. -->
+    <section class="mesa" id="mesa" aria-labelledby="titulo-mesa">
+      <div class="mesa-escena">
+        <div class="mesa-luz" aria-hidden="true"></div>
+        <div class="mesa-dibujo" aria-hidden="true">
+          <svg viewBox="0 0 320 640" fill="none" stroke="currentColor">
+            <g class="mesa-sillas" stroke-width="1.3">
+              <rect x="80" y="104" width="28" height="34" rx="8"/><rect x="80" y="224" width="28" height="34" rx="8"/>
+              <rect x="80" y="344" width="28" height="34" rx="8"/><rect x="80" y="464" width="28" height="34" rx="8"/>
+              <rect x="212" y="104" width="28" height="34" rx="8"/><rect x="212" y="224" width="28" height="34" rx="8"/>
+              <rect x="212" y="344" width="28" height="34" rx="8"/><rect x="212" y="464" width="28" height="34" rx="8"/>
+            </g>
+            <rect class="mesa-borde" x="118" y="56" width="84" height="528" rx="12" stroke-width="1.6" pathLength="1"/>
+            <rect class="mesa-mantel" x="125" y="63" width="70" height="514" rx="8" stroke-width=".8"/>
+            <g class="mesa-platos" stroke-width="1.2">
+              <circle cx="137" cy="121" r="11"/><circle cx="137" cy="241" r="11"/><circle cx="137" cy="361" r="11"/><circle cx="137" cy="481" r="11"/>
+              <circle cx="183" cy="121" r="11"/><circle cx="183" cy="241" r="11"/><circle cx="183" cy="361" r="11"/><circle cx="183" cy="481" r="11"/>
+              <circle cx="137" cy="121" r="6"/><circle cx="137" cy="241" r="6"/><circle cx="137" cy="361" r="6"/><circle cx="137" cy="481" r="6"/>
+              <circle cx="183" cy="121" r="6"/><circle cx="183" cy="241" r="6"/><circle cx="183" cy="361" r="6"/><circle cx="183" cy="481" r="6"/>
+            </g>
+          </svg>
+          <ul class="mesa-velas">
+            <li style="--y:12.5%"><i></i><b></b></li><li style="--y:23.4%"><i></i><b></b></li>
+            <li style="--y:34.3%"><i></i><b></b></li><li style="--y:45.2%"><i></i><b></b></li>
+            <li style="--y:56.1%"><i></i><b></b></li><li style="--y:67%"><i></i><b></b></li>
+            <li style="--y:77.9%"><i></i><b></b></li><li style="--y:88.8%"><i></i><b></b></li>
+          </ul>
+        </div>
+        <div class="mesa-textos">
+          <h2 id="titulo-mesa" class="mesa-final">Hay un lugar para ti</h2>
+          <p class="mesa-linea" data-tramo="1">En medio de una ciudad acelerada y llena de ruido…</p>
+          <p class="mesa-linea" data-tramo="2">…hay una mesa servida esperando por ti.</p>
+          <button class="buscar mesa-boton" id="buscar-mesa" type="button"><span>Encontrar mi sede</span></button>
+        </div>
+      </div>
     </section>
 
     <section class="seccion" aria-labelledby="titulo-lejos">

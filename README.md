@@ -46,6 +46,23 @@ responde a algo (un toque, un cambio de estado, un lugar en el mapa), un solo mo
   de foco se asienta de 6 a 2 px, y la selección de texto y la barra de desplazamiento usan los colores de la página.
 - **Reducir movimiento** (ajuste del teléfono): nada se desplaza ni crece; quedan los fundidos.
 
+## Celular y tableta (modo app)
+
+Decisión del 5-nov: la página se usa sobre todo en el celular, a veces en plena obra, con pocos segundos y señal
+congestionada. Por eso lo útil va primero y el movimiento con scroll va después, sin contar el final de la obra.
+
+- **Arriba:** título en una línea, «Buscar la sede más cercana», mapa grande y las sedes como tarjetas que se deslizan
+  con el pulgar (una a la vez, con «1 de 8» y flechas). Al deslizar, el mapa vuela a la vela de esa sede; tocar una vela
+  trae su tarjeta. «Copiar» va junto a la dirección y «Guardar» junto al teléfono. En la tableta vertical se ven dos
+  tarjetas; desde 960 px de ancho vuelve la lista con el mapa fijo y la ficha.
+- **La mesa** (`#mesa`): el único momento de scroll. Mientras se baja, la escena queda fija: la mesa se dibuja, se
+  encienden 8 velas (una por sede) y el fondo pasa del azul frío de la ciudad al ámbar del banquete, con dos frases de la
+  bienvenida del evento, hasta «Hay un lugar para ti» y el botón «Encontrar mi sede». Es dibujo (SVG y CSS), no video.
+  Sin JavaScript o con «reducir movimiento» se ve terminada y quieta.
+- **Revive la noche** (`#revive`): seis escenas de la pantalla de la obra (`img/noche/*.webp`, 4:3, ~470 KB en total,
+  se cargan solo al llegar a ellas). Se muestra sola desde el 30-nov-2026 a las 00:00 (hora de Colombia), porque antes
+  contaría el final; para revisarla antes, abrir la página con `?revive=1`. Cada foto se revela una vez al llegar.
+
 ## Publicación
 
 Railway construye el `Dockerfile` (Caddy sirve los archivos en el puerto `PORT`, con compresión y cabeceras de
