@@ -59,9 +59,9 @@ congestionada. Por eso lo útil va primero y el movimiento con scroll va despué
   encienden 8 velas (una por sede) y el fondo pasa del azul frío de la ciudad al ámbar del banquete, con dos frases de la
   bienvenida del evento, hasta «Hay un lugar para ti» y el botón «Encontrar mi sede». Es dibujo (SVG y CSS), no video.
   Sin JavaScript o con «reducir movimiento» se ve terminada y quieta.
-- **Revive la noche** (`#revive`): seis escenas de la pantalla de la obra (`img/noche/*.webp`, 4:3, ~470 KB en total,
-  se cargan solo al llegar a ellas). Se muestra sola desde el 30-nov-2026 a las 00:00 (hora de Colombia), porque antes
-  contaría el final; para revisarla antes, abrir la página con `?revive=1`. Cada foto se revela una vez al llegar.
+- Después de la mesa siguen «Más sedes en Norte de Santander» y «¿Vives en otra ciudad?». Una sección con fotos de la
+  obra («Revive la noche») se probó y se quitó el 5-nov a pedido de Miguel: no hacían falta tantas imágenes (queda en el
+  historial de git, commit 0d06d54).
 
 ## Publicación
 

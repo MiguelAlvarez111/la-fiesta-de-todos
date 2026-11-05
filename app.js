@@ -5,8 +5,7 @@
      en pantalla ancha: lista a la izquierda y ficha de la sede sobre el mapa;
    - la sede más cercana: la lista se reordena, aparece un camino de luz desde ti y se resalta su tarjeta o su ficha;
    - copiar la dirección, guardar el contacto y compartir, con un aviso breve;
-   - la mesa: el momento de scroll (la mesa se dibuja, ocho velas se encienden, el fondo pasa de frío a cálido);
-   - «Revive la noche», que se muestra sola desde el 30 de noviembre (antes contaría el final de la obra).
+   - la mesa: el momento de scroll (la mesa se dibuja, ocho velas se encienden, el fondo pasa de frío a cálido).
    La ubicación nunca sale del teléfono. Con «reducir movimiento» nada se desplaza: solo fundidos. */
 (() => {
   'use strict';
@@ -26,7 +25,6 @@
   const EASE_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)';
   const LEJOS_KM = 40;
   const URL_PAGINA = 'https://lafiestadetodos-production.up.railway.app/';
-  const FECHA_REVIVE = Date.parse('2026-11-30T00:00:00-05:00');
   const enRiel = () => !ancho.matches;
 
   const sedes = [...lista.querySelectorAll('.sede')].map((li, i) => ({
@@ -651,24 +649,6 @@
     pintar();
   }
 
-  /* ---------- Revive la noche: desde el 30 de noviembre ---------- */
-  function prepararRevive() {
-    const revive = $('#revive');
-    const antesDeTiempo = new URLSearchParams(location.search).has('revive'); // para revisarla antes de la fecha
-    if (!revive || (Date.now() < FECHA_REVIVE && !antesDeTiempo)) return;
-    revive.hidden = false;
-    if (reducido.matches || !('IntersectionObserver' in window)) return;
-    revive.classList.add('viva');
-    const io = new IntersectionObserver((entradas) => {
-      entradas.forEach((e) => {
-        if (!e.isIntersecting) return;
-        e.target.classList.add('vista');
-        io.unobserve(e.target);
-      });
-    }, { rootMargin: '0px 0px -12% 0px' });
-    revive.querySelectorAll('.escena').forEach((el) => io.observe(el));
-  }
-
   /* ---------- Compartir ---------- */
   const botonCompartir = $('#compartir');
   botonCompartir.addEventListener('click', async () => {
@@ -693,5 +673,4 @@
   crearMapa();
   prepararRiel();
   prepararMesa();
-  prepararRevive();
 })();
