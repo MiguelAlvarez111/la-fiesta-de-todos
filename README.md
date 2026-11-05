@@ -25,6 +25,27 @@ teléfono: no hay cookies, analítica ni envío de datos.
 Para cambiar una sede, editar su bloque `<li class="sede" …>` en `index.html` (nombre, `data-lat`/`data-lon`,
 dirección, teléfonos y enlaces).
 
+## Componentes y movimiento
+
+Criterios tomados de las skills de diseño de [Emil Kowalski](https://github.com/emilkowalski/skills),
+[Impeccable](https://github.com/pbakaus/impeccable) y [Taste](https://github.com/Leonxlnx/taste-skill): toda animación
+responde a algo (un toque, un cambio de estado, un lugar en el mapa), un solo momento con autor y nada más moviéndose solo.
+
+- **Velas que se encienden:** al aparecer el mapa, de oeste a este, con esperas que se acortan (una ola, no un
+  metrónomo); cada llama nace de una chispa desenfocada, nunca desde cero.
+- **Ficha de la sede:** al tocar una vela o el nombre de una sede sube una hoja (curva de cajón tipo iOS, 500 ms) con
+  cómo llegar, WhatsApp, llamar, copiar la dirección y guardar el contacto (archivo .vcf). Se cierra con la X, con Esc,
+  tocando el mapa o arrastrándola hacia abajo: basta un gesto rápido (velocidad > 0,11 px/ms), y hacia arriba ofrece
+  fricción. En pantalla ancha es una tarjeta sobre el mapa y el mapa deja la vela en la parte libre.
+- **La más cercana:** la lista se reordena (cada sede viaja a su puesto; la duración crece con la distancia), el mapa
+  encuadra a la persona y la sede, sale un anillo desde su punto, se traza un camino de luz y sube la ficha.
+- **Avisos breves** («Dirección copiada», «Enlace copiado»): entran y salen por el mismo borde; el reloj se detiene si
+  la pestaña no se ve.
+- **Detalles:** los botones se hunden al tocarlos (escala 0,97), el botón principal invita cada 6,5 s con un anillo
+  hasta que alguien lo usa (y descansa si no se ve), los efectos de pasar el puntero solo existen con mouse, el anillo
+  de foco se asienta de 6 a 2 px, y la selección de texto y la barra de desplazamiento usan los colores de la página.
+- **Reducir movimiento** (ajuste del teléfono): nada se desplaza ni crece; quedan los fundidos.
+
 ## Publicación
 
 Railway construye el `Dockerfile` (Caddy sirve los archivos en el puerto `PORT`, con compresión y cabeceras de
