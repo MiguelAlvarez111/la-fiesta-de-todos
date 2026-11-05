@@ -6,3 +6,4 @@ COPY index.html app.js estilos.css favicon.svg /srv/
 COPY fuentes/ /srv/fuentes/
 COPY img/ /srv/img/
 COPY vendor/ /srv/vendor/
+COPY mapa/ /srv/mapa/

@@ -13,13 +13,13 @@
 		X-Content-Type-Options "nosniff"
 		Referrer-Policy "strict-origin-when-cross-origin"
 		Permissions-Policy "geolocation=(self), camera=(), microphone=(), payment=()"
-		Content-Security-Policy "default-src 'self'; img-src 'self' data: https://tile.openstreetmap.org; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'"
+		Content-Security-Policy "default-src 'self'; img-src 'self' data: blob: https://tiles.openfreemap.org; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src blob:; child-src blob:; font-src 'self'; connect-src 'self' https://tiles.openfreemap.org; base-uri 'self'; form-action 'none'; frame-ancestors 'none'"
 		-Server
 	}
 
 	@fijos path /fuentes/* /vendor/* /img/*
 	header @fijos Cache-Control "public, max-age=604800"
 
-	@paginas path / /index.html /app.js /estilos.css /favicon.svg
+	@paginas path / /index.html /app.js /estilos.css /favicon.svg /mapa/estilo.json
 	header @paginas Cache-Control "no-cache"
 }

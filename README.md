@@ -17,8 +17,11 @@ exacta. Los horarios de reunión no están publicados: el mensaje de WhatsApp ya
 ## Cómo está hecha
 
 HTML, CSS y JavaScript sin dependencias de compilación. Todo se sirve desde el mismo dominio (fuentes Imbue y Atkinson
-Hyperlegible Next, Leaflet 1.9.4) salvo los mapas, que vienen de `tile.openstreetmap.org` (uso moderado y con
-atribución, como pide su política). La lista de sedes está escrita en `index.html` y funciona aunque el mapa no cargue;
+Hyperlegible Next, MapLibre GL 4.7.1 y el estilo del mapa `mapa/estilo.json`) salvo las calles del mapa: teselas
+vectoriales gratuitas de OpenFreeMap (`tiles.openfreemap.org`, datos de OpenStreetMap, sin clave). El mapa es vectorial
+para que se vea nítido en celulares de alta resolución (el anterior, de imágenes, se veía borroso en el iPhone); el estilo
+es el «positron» de OpenFreeMap con los azules de la página (`scratchpad`: `genera_estilo.py`, colores por capa). Sin
+WebGL el mapa se oculta y la lista de sedes funciona igual. La lista de sedes está escrita en `index.html` y funciona aunque el mapa no cargue;
 `app.js` agrega el mapa, la sede más cercana y el botón de compartir. La ubicación del visitante se usa solo en su
 teléfono: no hay cookies, analítica ni envío de datos.
 

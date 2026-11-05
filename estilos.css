@@ -118,35 +118,42 @@ h1 {
 }
 .mapa-marco::before { top: 0; background: linear-gradient(var(--noche), transparent); }
 .mapa-marco::after { bottom: 0; background: linear-gradient(transparent, var(--noche)); }
-.aviso-mapa {
-  position: absolute; z-index: 600; left: 50%; top: 50%; translate: -50% -50%;
-  margin: 0; padding: 12px 18px; border-radius: 12px; pointer-events: none;
-  background: rgba(7, 20, 48, .9); color: var(--mantel); font-weight: 700; white-space: nowrap;
-  transition: opacity .2s ease;
-}
-.aviso-mapa[hidden] { display: block; opacity: 0; }
+.mapa-marco.sin-mapa { display: none; } /* sin WebGL no hay mapa; la lista de sedes funciona igual */
 
-.leaflet-container { font: inherit; background: transparent; }
-/* OpenStreetMap es claro: se invierte y se tiñe del azul de la noche */
-.leaflet-tile-pane { filter: invert(.92) grayscale(1) brightness(.9) contrast(1.05) sepia(.7) hue-rotate(185deg) saturate(2.8) brightness(.85); }
-.leaflet-control-zoom.leaflet-bar { border: 1px solid var(--linea); border-radius: 12px; overflow: hidden; box-shadow: none; }
-.leaflet-control-zoom a, .leaflet-control-zoom a:hover {
-  width: 40px; height: 40px; line-height: 38px; background: var(--noche-alta); color: var(--mantel); border-color: var(--linea);
-}
-.leaflet-control-attribution.leaflet-control-attribution {
-  background: rgba(7, 20, 48, .75); color: var(--bruma); font-size: 11px; border-radius: 6px 0 0 0;
-}
-.leaflet-control-attribution a { color: var(--mantel); }
-.leaflet-control-zoom { margin-top: 44px !important; }
+/* Mapa vectorial (MapLibre + OpenFreeMap): nítido en cualquier pantalla, pintado con los azules de la página
+   (mapa/estilo.json). Los controles se tiñen con la misma paleta. */
+.maplibregl-map { font: inherit; }
+.maplibregl-ctrl-group { border: 1px solid var(--linea); border-radius: 12px; overflow: hidden; background: var(--noche-alta); }
+.maplibregl-ctrl-group:not(:empty) { box-shadow: none; }
+.maplibregl-ctrl-group button { width: 40px; height: 40px; }
+.maplibregl-ctrl-group button + button { border-top: 1px solid var(--linea); }
+.maplibregl-ctrl-group button .maplibregl-ctrl-icon { filter: invert(1) brightness(1.15); }
+.maplibregl-ctrl-top-left .maplibregl-ctrl { margin: 44px 0 0 10px; }
+.maplibregl-ctrl-bottom-left .maplibregl-ctrl { margin: 0 0 40px 10px; }
+.maplibregl-ctrl.maplibregl-ctrl-attrib { background: rgba(7, 20, 48, .8); color: var(--bruma); font-size: 11px; }
+.maplibregl-ctrl-attrib a { color: var(--mantel); }
+.maplibregl-ctrl-attrib.maplibregl-compact { margin: 0 8px 8px 0; }
+.maplibregl-ctrl-attrib-button { filter: invert(1); }
+.maplibregl-cooperative-gesture-screen { background: rgba(7, 20, 48, .7); color: var(--mantel); font: 700 1.05rem/1.4 var(--texto); padding: 24px; }
 .ver-todas {
-  margin-bottom: 40px !important; padding: 0 14px; min-height: 40px; border-radius: 999px; cursor: pointer;
+  padding: 0 14px; min-height: 40px; border-radius: 999px; cursor: pointer;
   border: 1px solid var(--linea); background: var(--noche-alta); color: var(--mantel); font-weight: 650; font-size: .95rem;
   transition: transform .16s var(--ease-out), border-color .2s ease;
 }
 .ver-todas:active { transform: scale(.97); }
 
 /* La vela de cada sede. Se enciende de oeste a este (retraso que se acorta, como una ola) al aparecer el mapa. */
-.vela { background: none; border: 0; }
+.vela { width: 34px; height: 34px; padding: 0; border: 0; background: none; cursor: pointer; }
+.vela:hover, .vela.elegida, .vela.cercana { z-index: 3; }
+/* el nombre de la sede aparece sobre la vela elegida (y al pasar el mouse) */
+.vela .etiqueta {
+  position: absolute; left: 50%; bottom: calc(100% + 2px); translate: -50% 4px; opacity: 0; pointer-events: none;
+  padding: 6px 10px; border: 1px solid rgba(242, 181, 68, .55); border-radius: 8px; white-space: nowrap;
+  background: var(--noche-alta); color: var(--mantel); box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
+  font: 700 .95rem/1.2 var(--texto);
+  transition: opacity .16s var(--ease-out), translate .16s var(--ease-out);
+}
+.vela.elegida .etiqueta, .vela.cercana .etiqueta { opacity: 1; translate: -50% 0; }
 .vela i {
   position: absolute; left: 50%; top: 50%; width: 76px; height: 76px; translate: -50% -42%;
   border-radius: 50%; pointer-events: none; opacity: 0;
@@ -170,7 +177,7 @@ h1 {
 .vela.cercana i { width: 120px; height: 120px; background: radial-gradient(circle, rgba(255, 210, 120, .7) 0, rgba(242, 181, 68, .22) 36%, transparent 66%); }
 
 /* Tú: un punto azul (frío, como la ciudad) con un anillo que sale una vez al ubicarte */
-.tu { background: none; border: 0; }
+.tu { width: 20px; height: 20px; pointer-events: none; }
 .tu b {
   position: absolute; inset: 0; border-radius: 50%; background: #8db7ff; border: 3px solid #fff;
   box-shadow: 0 0 0 8px rgba(141, 183, 255, .25);
@@ -178,16 +185,6 @@ h1 {
 .tu i { position: absolute; inset: -12px; border-radius: 50%; border: 2px solid rgba(141, 183, 255, .9); opacity: 0; }
 .tu.pulso i { animation: onda-tu 1.1s var(--ease-out) both; }
 @keyframes onda-tu { from { opacity: .9; scale: .55; } to { opacity: 0; scale: 2.3; } }
-
-/* El camino de luz desde ti hasta la sede más cercana */
-.camino { filter: drop-shadow(0 0 4px rgba(242, 181, 68, .85)); }
-
-.leaflet-tooltip.etiqueta {
-  padding: 6px 10px; border: 1px solid rgba(242, 181, 68, .55); border-radius: 8px;
-  background: var(--noche-alta); color: var(--mantel); box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
-  font-weight: 700; font-size: .95rem;
-}
-.leaflet-tooltip.etiqueta::before { display: none; }
 
 /* ---------- Lista de sedes ---------- */
 .seccion { padding-block: 34px 8px; }
@@ -348,7 +345,7 @@ h2 { margin: 0; font: 400 clamp(2rem, 8.5vw, 2.6rem)/1.02 var(--display); font-v
    Terminada por defecto (sin JavaScript o con «reducir movimiento»): fondo cálido, las 8 velas prendidas y el texto
    completo. Con .viva la escena queda fija mientras se baja: la mesa se dibuja, las velas se encienden una por sede y el
    fondo pasa del azul frío de la ciudad al ámbar del banquete, como en la obra. */
-.mesa { position: relative; margin-top: 30px; padding-inline: 0; color: #e2b04f; }
+.mesa { position: relative; margin-top: 0; padding-inline: 0; color: #e2b04f; }
 .mesa-escena {
   position: relative; display: grid; justify-items: center; align-content: center; gap: 22px; overflow: hidden;
   padding: 56px var(--margen) 64px; background: #24130a;
@@ -382,22 +379,31 @@ h2 { margin: 0; font: 400 clamp(2rem, 8.5vw, 2.6rem)/1.02 var(--display); font-v
 }
 .mesa-boton { order: 3; width: auto; min-width: 250px; }
 
-.mesa.viva { height: 320svh; }
-.mesa.viva .mesa-escena { position: sticky; top: 0; height: 100svh; padding-block: 28px; background: var(--noche); }
+/* La escena empieza a dibujarse apenas asoma (nunca una pantalla vacía) y ocupa justo lo que se ve (dvh) */
+.mesa.viva { height: 260svh; }
+.mesa.viva .mesa-escena {
+  position: sticky; top: 0; height: 100vh; height: 100dvh; padding-block: 16px 22px; gap: 12px; background: var(--noche);
+  align-content: stretch; grid-template-rows: minmax(0, 1fr) auto auto;
+  grid-template-areas: "dibujo" "texto" "boton";
+}
+.mesa.viva .mesa-dibujo { grid-area: dibujo; align-self: center; height: min(68dvh, 600px); }
 .mesa.viva .mesa-luz { opacity: 0; }
 .mesa.viva .mesa-borde { stroke-dashoffset: calc(1 - var(--trazo, 0)); }
-.mesa.viva .mesa-sillas { opacity: calc(var(--aparece, 0) * .5); }
-.mesa.viva .mesa-mantel { opacity: calc(var(--aparece, 0) * .4); }
-.mesa.viva .mesa-platos { opacity: calc(var(--aparece, 0) * .7); }
+/* la silueta de la mesa ya se adivina en la penumbra antes de que llegue la luz */
+.mesa.viva .mesa-sillas { opacity: calc(.14 + var(--aparece, 0) * .36); }
+.mesa.viva .mesa-mantel { opacity: calc(.2 + var(--aparece, 0) * .2); }
+.mesa.viva .mesa-platos { opacity: calc(.14 + var(--aparece, 0) * .56); }
 .mesa.viva .mesa-velas b, .mesa.viva .mesa-velas i { opacity: 0; transition: opacity .5s var(--ease-out), scale .6s var(--ease-out), filter .5s ease; }
 .mesa.viva .mesa-velas b { scale: .8; filter: blur(2px); }
 .mesa.viva .mesa-velas li.encendida b { opacity: 1; scale: 1; filter: blur(0); }
 .mesa.viva .mesa-velas li.encendida i { opacity: 1; }
-/* los textos se turnan en el mismo lugar; el botón aparece con el final */
-.mesa.viva .mesa-textos { display: grid; grid-template-rows: auto auto; justify-items: center; row-gap: 18px; min-height: 9.5rem; }
-.mesa.viva .mesa-textos > * { grid-area: 1 / 1; opacity: 0; translate: 0 10px; pointer-events: none;
+/* las frases se turnan debajo de la mesa y dan paso al título; el botón aparece con el final */
+.mesa.viva .mesa-textos { display: contents; }
+.mesa.viva .mesa-textos > * { justify-self: center; max-width: 30ch; opacity: 0; translate: 0 10px; pointer-events: none;
   transition: opacity .5s var(--ease-out), translate .6s var(--ease-out); }
-.mesa.viva .mesa-textos > .mesa-boton { grid-area: 2 / 1; }
+.mesa.viva .mesa-linea { grid-area: texto; align-self: center; text-align: center; }
+.mesa.viva .mesa-final { grid-area: texto; align-self: center; margin: 0; text-align: center; }
+.mesa.viva .mesa-boton { grid-area: boton; }
 .mesa.viva .mesa-textos > .visible { opacity: 1; translate: 0 0; pointer-events: auto; }
 
 /* ---------- Celular y tableta vertical: modo app (mapa grande y sedes que se deslizan con el pulgar) ---------- */
@@ -463,8 +469,8 @@ h2 { margin: 0; font: 400 clamp(2rem, 8.5vw, 2.6rem)/1.02 var(--display); font-v
   .mapa-marco { position: fixed; inset: 0 0 0 calc(var(--columna) + 2 * var(--margen)); }
   .mapa { height: 100%; }
   .mapa-marco::before, .mapa-marco::after { display: none; }
-  .leaflet-control-zoom { margin-top: 20px !important; }
-  .ver-todas { margin-bottom: 24px !important; }
+  .maplibregl-ctrl-top-left .maplibregl-ctrl { margin-top: 20px; }
+  .maplibregl-ctrl-bottom-left .maplibregl-ctrl { margin-bottom: 24px; }
   .sede.cercana { margin-inline: -18px; padding-inline: 18px; border-radius: 14px; }
   /* la ficha es una tarjeta sobre el mapa que crece desde abajo */
   .ficha {

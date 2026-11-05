@@ -14,7 +14,6 @@
   const lista = $('#lista');
   const estado = $('#estado');
   const botonBuscar = $('#buscar');
-  const avisoMapa = $('#aviso-mapa');
   const marcoMapa = $('.mapa-marco');
   const reducido = matchMedia('(prefers-reduced-motion: reduce)');
   const ancho = matchMedia('(min-width: 960px)');
@@ -22,7 +21,6 @@
   const esTactil = matchMedia('(pointer: coarse)').matches;
   const numero = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 1 });
   const EASE_IN_OUT = 'cubic-bezier(0.77, 0, 0.175, 1)';
-  const EASE_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)';
   const LEJOS_KM = 40;
   const URL_PAGINA = 'https://lafiestadetodos-production.up.railway.app/';
   const enRiel = () => !ancho.matches;
@@ -150,30 +148,67 @@
     if (tels?.querySelector('a')) tels.append(chip(ICONO_CONTACTO, 'Guardar', `Guardar el contacto de ${s.nombre}`, guardarContacto));
   });
 
-  /* ---------- Mapa ---------- */
+  /* ---------- Mapa (MapLibre: vectorial, nítido en cualquier pantalla; estilo propio en /mapa/estilo.json) ---------- */
   let mapa = null;
+  let mapaListo = null; // se cumple cuando el estilo del mapa cargó (una sola vez)
   let marcadorTu = null;
-  let camino = null;
-  const limitesSedes = () => window.L.latLngBounds(sedes.map((s) => s.punto));
+  const lngLat = (punto) => [punto[1], punto[0]];
+  const limites = (puntos) => puntos.reduce(
+    (b, p) => b.extend(lngLat(p)),
+    new window.maplibregl.LngLatBounds(lngLat(puntos[0]), lngLat(puntos[0])),
+  );
+  const limitesSedes = () => limites(sedes.map((s) => s.punto));
+  const duracion = (ms) => (reducido.matches ? 0 : ms);
+
+  function hayWebGL() {
+    try {
+      const c = document.createElement('canvas');
+      return !!(c.getContext('webgl2') || c.getContext('webgl'));
+    } catch {
+      return false;
+    }
+  }
+
+  function relleno() {
+    const w = marcoMapa.clientWidth;
+    return w > 600 ? 80 : { top: 40, bottom: 50, left: 40, right: 40 };
+  }
 
   function crearMapa() {
-    if (!window.L) return;
-    const L = window.L;
-    mapa = L.map('mapa', {
-      zoomSnap: 0.25,
-      scrollWheelZoom: false,
-      dragging: !esTactil,
-      tap: false,
-      minZoom: 11,
+    if (!window.maplibregl || !hayWebGL()) {
+      marcoMapa.classList.add('sin-mapa'); // la lista de sedes sigue funcionando
+      return;
+    }
+    const ml = window.maplibregl;
+    mapa = new ml.Map({
+      container: 'mapa',
+      style: '/mapa/estilo.json',
+      bounds: limitesSedes(),
+      fitBoundsOptions: { padding: relleno(), maxZoom: 16 },
+      minZoom: 10,
       maxZoom: 18,
+      attributionControl: false,
+      dragRotate: false,
+      pitchWithRotate: false,
+      touchPitch: false,
+      scrollZoom: false, // la rueda mueve la página; se acerca con los botones o con doble clic
+      cooperativeGestures: esTactil, // en el celular, un dedo mueve la página y dos el mapa
+      fadeDuration: 120,
+      locale: {
+        'NavigationControl.ZoomIn': 'Acercar',
+        'NavigationControl.ZoomOut': 'Alejar',
+        'AttributionControl.ToggleAttribution': 'Créditos del mapa',
+        'CooperativeGesturesHandler.MobileHelpText': 'Usa dos dedos para mover el mapa',
+        'CooperativeGesturesHandler.WindowsHelpText': 'Usa Ctrl + rueda para acercar el mapa',
+        'CooperativeGesturesHandler.MacHelpText': 'Usa ⌘ + rueda para acercar el mapa',
+      },
     });
-    mapa.attributionControl.setPrefix(false);
-    encuadrar(limitesSedes(), false); // el mapa necesita una vista antes de dibujar las velas
-    // Mapa libre de OpenStreetMap (sin clave); estilos.css lo vuelve nocturno.
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(mapa);
+    mapaListo = new Promise((listo) => mapa.once('load', listo));
+    mapa.touchZoomRotate.disableRotation();
+    mapa.keyboard.disableRotation();
+    mapa.addControl(new ml.NavigationControl({ showCompass: false }), 'top-left');
+    // créditos del mapa: abajo en el celular; arriba en pantalla ancha, donde abajo va la ficha
+    mapa.addControl(new ml.AttributionControl({ compact: true }), ancho.matches ? 'top-right' : 'bottom-right');
 
     // Las velas se encienden de oeste a este; cada espera es más corta que la anterior (una ola, no un metrónomo).
     const oesteAEste = [...sedes].sort((a, b) => a.punto[1] - b.punto[1]);
@@ -186,18 +221,29 @@
     });
 
     sedes.forEach((s) => {
-      const icono = L.divIcon({ className: 'vela', html: '<i></i><b></b>', iconSize: [34, 34], iconAnchor: [17, 17] });
-      s.marcador = L.marker(s.punto, { icon: icono, title: s.nombre, alt: s.nombre, riseOnHover: true })
-        .bindTooltip(s.nombre, { className: 'etiqueta', direction: 'top', offset: [0, -16] })
-        .on('click', () => (enRiel() ? irATarjeta(s) : elegir(s, { desde: 'mapa' })))
-        .addTo(mapa);
-      s.marcador.getElement().style.setProperty('--retraso', `${s.retraso}ms`);
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'vela';
+      el.setAttribute('aria-label', `Sede ${s.nombre}`);
+      el.innerHTML = '<i></i><b></b>'; // dibujo fijo de la vela
+      const nombre = document.createElement('span');
+      nombre.className = 'etiqueta';
+      nombre.setAttribute('aria-hidden', 'true');
+      nombre.textContent = s.nombre;
+      el.append(nombre);
+      el.style.setProperty('--retraso', `${s.retraso}ms`);
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (enRiel()) irATarjeta(s);
+        else elegir(s, { desde: 'mapa' });
+      });
       if (punteroFino.matches) {
-        s.marcador.on('mouseover', () => s.li.classList.add('resalta'));
-        s.marcador.on('mouseout', () => s.li.classList.remove('resalta'));
-        s.li.addEventListener('mouseenter', () => s.marcador.getElement()?.classList.add('resalta'));
-        s.li.addEventListener('mouseleave', () => s.marcador.getElement()?.classList.remove('resalta'));
+        el.addEventListener('mouseenter', () => s.li.classList.add('resalta'));
+        el.addEventListener('mouseleave', () => s.li.classList.remove('resalta'));
+        s.li.addEventListener('mouseenter', () => el.classList.add('resalta'));
+        s.li.addEventListener('mouseleave', () => el.classList.remove('resalta'));
       }
+      s.marcador = new ml.Marker({ element: el, anchor: 'center' }).setLngLat(lngLat(s.punto)).addTo(mapa);
     });
 
     // Encender cuando el mapa se ve.
@@ -214,52 +260,33 @@
       encender();
     }
 
-    const VerTodas = L.Control.extend({
-      options: { position: 'bottomleft' },
+    class VerTodas {
       onAdd() {
-        const b = L.DomUtil.create('button', 'ver-todas');
+        const caja = document.createElement('div');
+        caja.className = 'maplibregl-ctrl';
+        const b = document.createElement('button');
         b.type = 'button';
+        b.className = 'ver-todas';
         b.textContent = 'Ver todas las sedes';
-        L.DomEvent.disableClickPropagation(b);
-        L.DomEvent.on(b, 'click', () => {
+        b.addEventListener('click', (e) => {
+          e.stopPropagation();
           ficha.cerrar();
           encuadrar(limitesSedes());
         });
-        return b;
-      },
-    });
-    mapa.addControl(new VerTodas());
-    mapa.on('click', () => ficha.cerrar());
+        caja.append(b);
+        return caja;
+      }
 
-    // En el celular el mapa no atrapa el desplazamiento de la página: se mueve con dos dedos.
-    if (esTactil) {
-      const cont = mapa.getContainer();
-      let ocultar = 0;
-      cont.addEventListener('touchstart', (e) => {
-        if (e.touches.length > 1) mapa.dragging.enable();
-      }, { passive: true });
-      cont.addEventListener('touchend', (e) => {
-        if (e.touches.length === 0) mapa.dragging.disable();
-      }, { passive: true });
-      cont.addEventListener('touchmove', (e) => {
-        if (e.touches.length !== 1) return;
-        avisoMapa.hidden = false;
-        clearTimeout(ocultar);
-        ocultar = setTimeout(() => { avisoMapa.hidden = true; }, 1400);
-      }, { passive: true });
+      onRemove() {}
     }
-
-    new ResizeObserver(() => mapa.invalidateSize()).observe(mapa.getContainer());
+    mapa.addControl(new VerTodas(), 'bottom-left');
+    mapa.on('click', () => ficha.cerrar());
+    new ResizeObserver(() => mapa.resize()).observe(mapa.getContainer());
   }
 
-  function encuadrar(limites, animar = true) {
+  function encuadrar(caja, animar = true) {
     if (!mapa) return;
-    const w = mapa.getContainer().clientWidth;
-    mapa.fitBounds(limites, {
-      padding: w > 600 ? [80, 80] : [40, 50],
-      maxZoom: 16,
-      animate: animar && !reducido.matches,
-    });
+    mapa.fitBounds(caja, { padding: relleno(), maxZoom: 16, duration: animar ? duracion(900) : 0 });
   }
 
   // Al terminar de moverse el mapa (o enseguida, si no tenía que moverse).
@@ -299,9 +326,7 @@
     actualizarCuenta(s);
     marcarVela(s);
     if (volar && mapa) {
-      const z = Math.max(mapa.getZoom(), 14);
-      if (reducido.matches) mapa.setView(s.punto, z, { animate: false });
-      else mapa.flyTo(s.punto, z, { duration: 0.6 });
+      mapa.flyTo({ center: lngLat(s.punto), zoom: Math.max(mapa.getZoom(), 14), duration: duracion(600) });
     }
   }
 
@@ -403,7 +428,8 @@
       }
       el.classList.add('abierta');
       if (foco) nombre.focus({ preventScroll: true });
-      requestAnimationFrame(() => aLaVista(s));
+      // no interrumpir un vuelo del mapa en curso (al terminar, elegir() la deja a la vista)
+      requestAnimationFrame(() => { if (mapa && !mapa.isMoving()) aLaVista(s); });
     }
 
     function cerrar({ devolverFoco = false } = {}) {
@@ -433,9 +459,9 @@
     if (!mapa || enRiel()) return;
     const caja = mapa.getContainer().getBoundingClientRect();
     const w = ficha.el.classList.contains('abierta') ? caja.width - ficha.el.offsetWidth - 48 : caja.width;
-    const p = mapa.latLngToContainerPoint(s.punto);
+    const p = mapa.project(lngLat(s.punto));
     if (p.x < 40 || p.x > w - 40 || p.y < 50 || p.y > caja.height - 60) {
-      mapa.panBy([p.x - w / 2, p.y - caja.height / 2], { animate: !reducido.matches, duration: 0.45 });
+      mapa.panBy([p.x - w / 2, p.y - caja.height / 2], { duration: duracion(450) });
     }
   }
 
@@ -445,17 +471,14 @@
       // celular: subir al mapa y volar a la vela
       desplazar(marcoMapa);
       activar(s, { volar: true });
-      s.marcador?.openTooltip();
       return;
     }
     if (desde === 'lista' && mapa) {
-      const z = Math.max(mapa.getZoom(), 15);
       // La tarjeta ocupa la derecha: la vela llega al centro de lo que queda libre.
-      const centro = mapa.unproject(mapa.project(s.punto, z).add([(380 + 48) / 2, 0]), z);
-      if (reducido.matches) mapa.setView(centro, z, { animate: false });
-      else mapa.flyTo(centro, z, { duration: 0.8 });
+      mapa.flyTo({
+        center: lngLat(s.punto), zoom: Math.max(mapa.getZoom(), 15), offset: [-(380 + 48) / 2, 0], duration: duracion(800),
+      });
       alLlegar(() => aLaVista(s));
-      s.marcador.openTooltip();
     }
     ficha.abrir(s, { foco: desde === 'lista', disparador });
   }
@@ -493,22 +516,37 @@
     });
   }
 
+  // El camino de luz: una línea dorada con su resplandor que crece desde ti hasta la sede (700 ms, salida rápida).
   function dibujarCamino(desde, hasta) {
-    const L = window.L;
-    if (camino) camino.remove();
-    camino = L.polyline([desde, hasta], {
-      color: '#ffe2a0', weight: 3, opacity: 0.95, lineCap: 'round', className: 'camino', interactive: false,
-    }).addTo(mapa);
-    const trazo = camino.getElement();
-    if (!trazo || reducido.matches) return;
-    trazo.setAttribute('pathLength', '1'); // longitud normalizada: el zoom no rompe el trazo
-    trazo.style.strokeDasharray = '1 1';
-    const anim = trazo.animate([{ strokeDashoffset: '1' }, { strokeDashoffset: '0' }], { duration: 700, easing: EASE_OUT, fill: 'forwards' });
-    anim.onfinish = () => {
-      trazo.style.strokeDasharray = '';
-      trazo.removeAttribute('pathLength');
-      anim.cancel();
+    const a = lngLat(desde);
+    const b = lngLat(hasta);
+    const linea = (t) => ({
+      type: 'Feature',
+      properties: {},
+      geometry: { type: 'LineString', coordinates: [a, [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]] },
+    });
+    const poner = () => {
+      if (!mapa.getSource('camino')) {
+        mapa.addSource('camino', { type: 'geojson', data: linea(0) });
+        mapa.addLayer({ id: 'camino-brillo', type: 'line', source: 'camino', layout: { 'line-cap': 'round' },
+          paint: { 'line-color': '#f2b544', 'line-width': 11, 'line-opacity': 0.3, 'line-blur': 7 } });
+        mapa.addLayer({ id: 'camino', type: 'line', source: 'camino', layout: { 'line-cap': 'round' },
+          paint: { 'line-color': '#ffe2a0', 'line-width': 3 } });
+      }
+      const fuente = mapa.getSource('camino');
+      if (reducido.matches) {
+        fuente.setData(linea(1));
+        return;
+      }
+      const t0 = performance.now();
+      const paso = (ahora) => {
+        const t = Math.min(1, (ahora - t0) / 700);
+        fuente.setData(linea(1 - (1 - t) ** 3));
+        if (t < 1) requestAnimationFrame(paso);
+      };
+      requestAnimationFrame(paso);
     };
+    mapaListo.then(poner); // (isStyleLoaded es falso mientras cargan calles: no sirve para esto)
   }
 
   function encontrado(pos) {
@@ -546,17 +584,17 @@
       desplazar(primera.li);
       return;
     }
-    const L = window.L;
     if (!marcadorTu) {
-      const icono = L.divIcon({ className: 'tu', html: '<i></i><b></b>', iconSize: [20, 20], iconAnchor: [10, 10] });
-      marcadorTu = L.marker(yo, { icon: icono, title: 'Tú', alt: 'Tú', zIndexOffset: 1000, keyboard: false })
-        .bindTooltip('Tú', { className: 'etiqueta', direction: 'top', offset: [0, -10] })
-        .addTo(mapa);
+      const el = document.createElement('div');
+      el.className = 'tu';
+      el.setAttribute('role', 'img');
+      el.setAttribute('aria-label', 'Tu ubicación');
+      el.innerHTML = '<i></i><b></b>'; // dibujo fijo del punto
+      marcadorTu = new window.maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat(lngLat(yo)).addTo(mapa);
     } else {
-      marcadorTu.setLatLng(yo);
+      marcadorTu.setLngLat(lngLat(yo));
     }
     primera.marcador.getElement().classList.add('cercana');
-    primera.marcador.setZIndexOffset(500);
     if (enRiel()) desplazar(marcoMapa);
     ficha.cerrar();
 
@@ -570,11 +608,12 @@
       dibujarCamino(yo, primera.punto);
       if (!enRiel()) setTimeout(() => ficha.abrir(primera), reducido.matches ? 0 : 380);
     });
-    mapa.fitBounds(L.latLngBounds([yo, primera.punto]), {
-      paddingTopLeft: ancho.matches ? [80, 80] : [50, 50],
-      paddingBottomRight: ancho.matches ? [80 + 428, 80] : [50, 50], // en pantalla ancha, libre la columna de la ficha
+    mapa.fitBounds(limites([yo, primera.punto]), {
+      // en pantalla ancha queda libre la columna de la ficha
+      // en el celular, margen para el nombre que aparece sobre la vela
+      padding: ancho.matches ? { top: 80, bottom: 80, left: 80, right: 80 + 428 } : { top: 80, bottom: 60, left: 80, right: 80 },
       maxZoom: 16,
-      animate: !reducido.matches,
+      duration: duracion(900),
     });
   }
 
@@ -621,18 +660,20 @@
 
     const pintar = () => {
       pedido = false;
+      // El avance empieza cuando la escena asoma (su borde superior a 3/4 de la pantalla), no cuando ya llenó la
+      // pantalla: así nunca se ve una escena vacía. Termina cuando la escena se suelta.
       const r = mesa.getBoundingClientRect();
-      const recorrido = Math.max(1, r.height - window.innerHeight);
-      const p = entre(-r.top / recorrido);
-      dibujo.style.setProperty('--trazo', entre(p / 0.12).toFixed(3));
-      dibujo.style.setProperty('--aparece', entre((p - 0.06) / 0.12).toFixed(3));
-      velas.forEach((v, i) => v.classList.toggle('encendida', p >= 0.16 + i * 0.07));
-      linea1.classList.toggle('visible', p >= 0.03 && p < 0.34);
-      linea2.classList.toggle('visible', p >= 0.36 && p < 0.68);
-      final.forEach((el) => el.classList.toggle('visible', p >= 0.72));
-      const t = suavizar(entre((p - 0.1) / 0.65));
+      const alto = window.innerHeight;
+      const p = entre((alto * 0.75 - r.top) / Math.max(1, r.height - alto * 0.25));
+      dibujo.style.setProperty('--trazo', entre(p / 0.16).toFixed(3));
+      dibujo.style.setProperty('--aparece', entre((p - 0.06) / 0.14).toFixed(3));
+      velas.forEach((v, i) => v.classList.toggle('encendida', p >= 0.2 + i * 0.06));
+      linea1.classList.toggle('visible', p < 0.36);
+      linea2.classList.toggle('visible', p >= 0.38 && p < 0.68);
+      final.forEach((el) => el.classList.toggle('visible', p >= 0.7));
+      const t = suavizar(entre((p - 0.1) / 0.6));
       escena.style.backgroundColor = `rgb(${frio.map((c, k) => Math.round(c + (calido[k] - c) * t)).join(',')})`;
-      luz.style.opacity = entre((p - 0.2) / 0.55).toFixed(3);
+      luz.style.opacity = entre((p - 0.25) / 0.5).toFixed(3);
     };
     const pedir = () => {
       if (!pedido) {
