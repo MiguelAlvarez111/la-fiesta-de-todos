@@ -1,0 +1,252 @@
+/* La Fiesta de Todos · sedes de ICT en Cúcuta
+   Idea: la ciudad de noche (fría, azul ICT) y cada sede como una vela encendida (cálida),
+   igual que la obra pasa de la ciudad de neón al banquete. Se lee en una sala oscura: fondo oscuro. */
+
+@font-face {
+  font-family: 'Imbue';
+  src: url('/fuentes/imbue-latin.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible Next';
+  src: url('/fuentes/atkinson-next-latin.woff2') format('woff2');
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+:root {
+  --noche: #071430;        /* fondo: azul ICT de noche */
+  --noche-alta: #0e1f45;   /* superficies */
+  --linea: #213a6c;        /* divisiones */
+  --vela: #f2b544;         /* luz de vela: acciones y sedes */
+  --llama: #ffe2a0;        /* el centro de la llama */
+  --mantel: #f6f0e6;       /* texto */
+  --bruma: #a9b5cd;        /* texto secundario */
+  --display: 'Imbue', 'Bodoni 72', Didot, Georgia, serif;
+  --texto: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible', system-ui, sans-serif;
+  --margen: clamp(20px, 5.5vw, 40px);
+  --columna: 540px;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 16px; }
+body {
+  margin: 0;
+  background: var(--noche);
+  color: var(--mantel);
+  font: 400 1.125rem/1.55 var(--texto);
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--llama); outline-offset: 3px; border-radius: 4px; }
+
+.saltar {
+  position: absolute; left: 12px; top: -60px; z-index: 1000;
+  padding: 10px 16px; border-radius: 8px; background: var(--vela); color: var(--noche); font-weight: 700;
+  text-decoration: none;
+}
+.saltar:focus { top: 12px; }
+
+/* ---------- Columna de contenido ---------- */
+.cabecera, main > section, .pie { padding-inline: var(--margen); }
+.cabecera { padding-top: 22px; }
+.logo { height: 30px; width: auto; filter: brightness(0) invert(1); opacity: .9; }
+
+.portada { padding-top: clamp(36px, 9vw, 72px); padding-bottom: 28px; }
+h1 {
+  margin: 0 0 22px;
+  font: 400 clamp(4rem, 19vw, 7.6rem)/.86 var(--display);
+  font-variation-settings: 'opsz' 100;
+  letter-spacing: -.012em;
+  text-wrap: balance;
+  text-shadow: 0 0 .6em rgba(242, 181, 68, .18);
+}
+.entrada { max-width: 31ch; margin: 0 0 30px; font-size: 1.2rem; line-height: 1.5; }
+
+.buscar {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  width: 100%; max-width: 440px; min-height: 60px; padding: 0 24px;
+  border: 0; border-radius: 999px; cursor: pointer;
+  background: var(--vela); color: var(--noche);
+  font-weight: 750; font-size: 1.15rem;
+  box-shadow: 0 0 0 1px rgba(255, 226, 160, .5) inset, 0 10px 40px -12px rgba(242, 181, 68, .65);
+  transition: transform .15s, box-shadow .2s, background .2s;
+}
+.buscar svg { width: 24px; height: 24px; flex: none; }
+.buscar:hover { background: #f6c25d; }
+.buscar:active { transform: scale(.98); }
+.buscar[aria-busy='true'] { cursor: progress; background: #e7ad45; }
+.buscar[aria-busy='true'] svg { animation: girar 1.4s linear infinite; }
+@keyframes girar { to { transform: rotate(360deg); } }
+.estado { max-width: 40ch; min-height: 3.1em; margin: 14px 0 0; color: var(--bruma); font-size: 1rem; line-height: 1.45; }
+.estado.bien { color: var(--llama); }
+
+/* ---------- Mapa ---------- */
+.mapa-marco { position: relative; }
+.mapa {
+  height: clamp(330px, 52svh, 540px);
+  background: #0a1a3d;
+  /* sin tiles todavía, las velas igual se ven sobre la noche */
+  background-image: radial-gradient(120% 90% at 50% 40%, #11285a 0, #0a1a3d 55%, #071430 100%);
+}
+.mapa-marco::before, .mapa-marco::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 36px; z-index: 500; pointer-events: none;
+}
+.mapa-marco::before { top: 0; background: linear-gradient(var(--noche), transparent); }
+.mapa-marco::after { bottom: 0; background: linear-gradient(transparent, var(--noche)); }
+.aviso-mapa {
+  position: absolute; z-index: 600; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  margin: 0; padding: 12px 18px; border-radius: 12px; pointer-events: none;
+  background: rgba(7, 20, 48, .88); color: var(--mantel); font-weight: 700; white-space: nowrap;
+}
+
+.leaflet-container { font: inherit; background: transparent; }
+/* OpenStreetMap es claro: se invierte y se tiñe del azul de la noche */
+.leaflet-tile-pane { filter: invert(.92) grayscale(1) brightness(.9) contrast(1.05) sepia(.7) hue-rotate(185deg) saturate(2.8) brightness(.85); }
+.leaflet-control-zoom.leaflet-bar { border: 1px solid var(--linea); border-radius: 12px; overflow: hidden; box-shadow: none; }
+.leaflet-control-zoom a, .leaflet-control-zoom a:hover {
+  width: 40px; height: 40px; line-height: 38px; background: var(--noche-alta); color: var(--mantel); border-color: var(--linea);
+}
+.leaflet-control-attribution.leaflet-control-attribution {
+  background: rgba(7, 20, 48, .75); color: var(--bruma); font-size: 11px; border-radius: 6px 0 0 0;
+}
+.leaflet-control-attribution a { color: var(--mantel); }
+.leaflet-control-zoom { margin-top: 44px !important; }
+.ver-todas {
+  margin-bottom: 40px !important; padding: 0 14px; min-height: 40px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--linea); background: var(--noche-alta); color: var(--mantel); font-weight: 650; font-size: .95rem;
+}
+
+/* La vela de cada sede */
+.vela { background: none; border: 0; }
+.vela i {
+  position: absolute; left: 50%; top: 50%; width: 76px; height: 76px; transform: translate(-50%, -42%);
+  border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(242, 181, 68, .5) 0, rgba(242, 181, 68, .16) 38%, transparent 66%);
+}
+.vela b {
+  position: absolute; left: 50%; top: 50%; width: 17px; height: 17px; margin: -10px 0 0 -8.5px;
+  border-radius: 0 50% 50% 50%; transform: rotate(45deg);
+  background: radial-gradient(circle at 62% 62%, #fffaf0 0 18%, var(--llama) 34%, var(--vela) 72%);
+  box-shadow: 0 0 10px 2px rgba(255, 210, 120, .75);
+}
+.vela i, .vela b { animation: encender .9s cubic-bezier(.2, .9, .25, 1.15) both; animation-delay: calc(var(--i, 0) * 160ms + 350ms); }
+@keyframes encender { from { opacity: 0; scale: .2; } to { opacity: 1; scale: 1; } }
+.vela.cercana b { width: 23px; height: 23px; margin: -14px 0 0 -11.5px; }
+.vela.cercana i { width: 120px; height: 120px; background: radial-gradient(circle, rgba(255, 210, 120, .7) 0, rgba(242, 181, 68, .22) 36%, transparent 66%); }
+.vela.apagada b { filter: saturate(.5) brightness(.75); }
+.vela.apagada i { opacity: .35; }
+
+.tu { background: none; border: 0; }
+.tu b {
+  position: absolute; inset: 0; border-radius: 50%; background: #8db7ff; border: 3px solid #fff;
+  box-shadow: 0 0 0 8px rgba(141, 183, 255, .25);
+}
+
+.leaflet-tooltip.etiqueta {
+  padding: 6px 10px; border: 1px solid rgba(242, 181, 68, .55); border-radius: 8px;
+  background: var(--noche-alta); color: var(--mantel); box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
+  font-weight: 700; font-size: .95rem;
+}
+.leaflet-tooltip.etiqueta::before { display: none; }
+
+/* ---------- Lista de sedes ---------- */
+.seccion { padding-block: 34px 8px; }
+h2 { margin: 0; font: 400 clamp(2rem, 8.5vw, 2.6rem)/1.02 var(--display); font-variation-settings: 'opsz' 72; text-wrap: balance; }
+.ayuda { margin: 8px 0 18px; color: var(--bruma); font-size: 1rem; }
+
+.sedes { list-style: none; margin: 0; padding: 0; }
+.sede {
+  position: relative; padding: 22px 0 24px; border-top: 1px solid var(--linea);
+  scroll-margin-top: 18px; transition: background-color .4s;
+}
+.sede h3 { margin: 0 0 6px; font: 400 2rem/1 var(--display); font-variation-settings: 'opsz' 60; }
+.ver {
+  padding: 0; border: 0; background: none; cursor: pointer; text-align: left;
+  font: inherit; letter-spacing: inherit; text-decoration: underline; text-decoration-thickness: 1px;
+  text-underline-offset: .18em; text-decoration-color: rgba(242, 181, 68, .45);
+}
+.ver:hover { text-decoration-color: var(--vela); }
+.direccion { margin: 0; }
+.tels { margin: 2px 0 0; color: var(--bruma); font-size: 1rem; }
+.tels a { color: var(--bruma); text-underline-offset: .2em; }
+.distancia { margin: 10px 0 0; color: var(--vela); font-weight: 750; }
+
+.sede.cercana {
+  margin-inline: calc(var(--margen) * -1); padding-inline: var(--margen);
+  background: radial-gradient(130% 120% at 0% 0%, rgba(242, 181, 68, .2), rgba(242, 181, 68, .05) 45%, transparent 75%);
+  border-top-color: rgba(242, 181, 68, .5);
+}
+.sede.cercana h3, .sede.elegida h3 { color: var(--llama); }
+.sede.elegida { background-color: rgba(141, 183, 255, .06); }
+
+.acciones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 440px; margin-top: 16px; }
+.acciones .accion-ir { grid-column: 1 / -1; }
+.acciones .accion { justify-content: center; }
+.accion {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 18px;
+  border: 1px solid var(--linea); border-radius: 999px; background: var(--noche-alta);
+  color: var(--mantel); font-weight: 650; font-size: 1rem; text-decoration: none;
+  transition: border-color .2s, background-color .2s;
+}
+.accion svg { width: 20px; height: 20px; flex: none; }
+.accion:hover { border-color: rgba(242, 181, 68, .7); }
+.accion-ir { background: transparent; border-color: rgba(242, 181, 68, .7); color: var(--llama); }
+.accion-ir:hover { background: rgba(242, 181, 68, .12); }
+.sede.cercana .accion-ir { background: var(--vela); border-color: var(--vela); color: var(--noche); }
+
+/* Otras sedes y otras ciudades */
+.lejos { border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); }
+.lejos summary {
+  display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 16px;
+  padding: 22px 0; cursor: pointer; list-style: none;
+}
+.lejos summary::-webkit-details-marker { display: none; }
+.lejos summary h2 { font-size: clamp(1.7rem, 7vw, 2.1rem); }
+.lejos summary span { grid-column: 1; color: var(--bruma); font-size: 1rem; margin-top: 4px; }
+.lejos summary::after {
+  content: ''; grid-column: 2; grid-row: 1 / span 2; width: 14px; height: 14px; margin-right: 6px;
+  border-right: 2px solid var(--vela); border-bottom: 2px solid var(--vela); transform: rotate(45deg) translateY(-4px);
+  transition: transform .2s;
+}
+.lejos[open] summary::after { transform: rotate(-135deg) translateY(-4px); }
+.lejos .sedes { padding-bottom: 12px; }
+.sede-lejos h3 { font-size: 1.7rem; }
+
+.otra-ciudad { padding: 34px 0 10px; }
+.otra-ciudad p { margin: 8px 0 16px; color: var(--bruma); }
+
+/* ---------- Pie ---------- */
+.pie { padding-top: 40px; padding-bottom: calc(40px + env(safe-area-inset-bottom)); }
+.compartir {
+  min-height: 52px; padding: 0 22px; border-radius: 999px; cursor: pointer;
+  border: 1px solid rgba(242, 181, 68, .7); background: transparent; color: var(--llama); font-weight: 700;
+}
+.compartir:hover { background: rgba(242, 181, 68, .12); }
+.pie-ict { display: flex; align-items: center; gap: 12px; margin: 34px 0 10px; color: var(--bruma); font-size: .95rem; }
+.pie-ict img { height: 22px; width: auto; filter: brightness(0) invert(1); opacity: .75; }
+.redes { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 0 0 20px; padding: 0; list-style: none; font-size: 1rem; }
+.redes a { color: var(--mantel); text-underline-offset: .2em; text-decoration-color: rgba(242, 181, 68, .45); }
+.fuente { max-width: 56ch; margin: 0; color: var(--bruma); font-size: .9rem; line-height: 1.5; }
+.sin-js { margin: 0; padding: 16px var(--margen); color: var(--bruma); }
+
+/* ---------- Pantallas anchas: lista a la izquierda, mapa fijo a la derecha ---------- */
+@media (min-width: 960px) {
+  body { padding-right: calc(100% - var(--columna) - 2 * var(--margen)); }
+  .cabecera { padding-top: 32px; }
+  .mapa-marco { position: fixed; inset: 0 0 0 calc(var(--columna) + 2 * var(--margen)); }
+  .mapa { height: 100%; }
+  .mapa-marco::before, .mapa-marco::after { display: none; }
+  .mapa-marco { box-shadow: inset 28px 0 40px -20px var(--noche); }
+  .leaflet-control-zoom { margin-top: 20px !important; }
+  .ver-todas { margin-bottom: 24px !important; }
+  .sede.cercana { margin-inline: -18px; padding-inline: 18px; border-radius: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

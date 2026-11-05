@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>La Fiesta de Todos · Sedes de ICT en Cúcuta</title>
+  <meta name="description" content="Encuentra la sede de ICT más cercana en Cúcuta y Villa del Rosario: dirección, cómo llegar y WhatsApp.">
+  <meta name="theme-color" content="#071430">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_CO">
+  <meta property="og:title" content="La Fiesta de Todos">
+  <meta property="og:description" content="La mesa está servida y hay un lugar para ti. Encuentra la sede de ICT más cercana en Cúcuta.">
+  <meta property="og:image" content="/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/fuentes/imbue-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fuentes/atkinson-next-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preconnect" href="https://tile.openstreetmap.org">
+  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="/estilos.css">
+</head>
+<body>
+  <a class="saltar" href="#sedes">Ir a la lista de sedes</a>
+
+  <header class="cabecera">
+    <img class="logo" src="/img/ict.png" alt="ICT" width="605" height="219">
+  </header>
+
+  <main>
+    <section class="portada" aria-labelledby="titulo">
+      <h1 id="titulo">La Fiesta<br>de Todos</h1>
+      <p class="entrada">La mesa está servida y hay un lugar para ti. Busca la sede de ICT más cerca de tu casa y escríbeles para saber cuándo se reúnen.</p>
+      <button class="buscar" id="buscar" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.6" fill="currentColor"/><path d="M12 1.5v3.5M12 19v3.5M1.5 12H5M19 12h3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span>Buscar la sede más cercana</span>
+      </button>
+      <p class="estado" id="estado" role="status" aria-live="polite">Tu ubicación solo se usa en tu teléfono para medir la distancia.</p>
+    </section>
+
+    <div class="mapa-marco">
+      <div class="mapa" id="mapa" role="region" aria-label="Mapa de las sedes de ICT en Cúcuta y Villa del Rosario"></div>
+      <p class="aviso-mapa" id="aviso-mapa" hidden>Usa dos dedos para mover el mapa</p>
+    </div>
+
+    <section class="seccion" id="sedes" aria-labelledby="titulo-sedes">
+      <h2 id="titulo-sedes">8 sedes en Cúcuta y Villa del Rosario</h2>
+      <p class="ayuda">Toca el nombre de una sede para verla en el mapa.</p>
+      <ol class="sedes" id="lista">
+      <li class="sede" id="san-martin" data-nombre="San Martín" data-lat="7.90041" data-lon="-72.47022" style="--i:0">
+        <h3><button class="ver" type="button" aria-label="Ver San Martín en el mapa">San Martín</button></h3>
+        <p class="direccion">Av. 19 # 1-05, barrio Siglo XXI, Cúcuta</p>
+        <p class="tels"><a href="tel:+573115274885">311 527 4885</a></p>
+        <p class="distancia" hidden></p>
+        <div class="acciones"><a class="accion accion-ir" href="https://www.google.com/maps/search/?api=1&amp;query=Avenida+19+%23+1-05%2C+Siglo+XXI%2C+C%C3%BAcuta%2C+Norte+de+Santander" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 21.5 12 12 21.5 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 14.5v-3h5.5M12.5 9.5l2 2-2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Cómo llegar</a><a class="accion" href="https://wa.me/573115274885?text=Hola%2C+vengo+de+La+Fiesta+de+Todos+y+quiero+saber+cu%C3%A1ndo+se+re%C3%BAnen+en+la+sede+San+Mart%C3%ADn." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1.2-3.6A8 8 0 1 1 8.4 18.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.2 8.6c.3-.5.8-.5 1-.1l.7 1.5c.1.3 0 .6-.2.8l-.4.4c.5 1.1 1.4 2 2.5 2.5l.4-.4c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7-.1 1-.9.6-2 .7-3 .2a8 8 0 0 1-3.4-3.4c-.5-1-.4-2.1.2-3z" fill="currentColor"/></svg>WhatsApp</a><a class="accion" href="tel:+573115274885"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4.1-2 1.3a11 11 0 0 0 6.5 6.5l1.3-2 4.1 1.4v2.6c0 1.1-.9 2-2 2A16.5 16.5 0 0 1 4.6 5.5c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Llamar</a></div>
+      </li>
+      <li class="sede" id="la-riviera" data-nombre="La Riviera" data-lat="7.89473" data-lon="-72.49178" style="--i:1">
+        <h3><button class="ver" type="button" aria-label="Ver La Riviera en el mapa">La Riviera</button></h3>
+        <p class="direccion">Av. 9E # 6-90, barrio La Riviera, Cúcuta</p>
+        <p class="tels"><a href="tel:+573208494535">320 849 4535</a></p>
+        <p class="distancia" hidden></p>
+        <div class="acciones"><a class="accion accion-ir" href="https://www.google.com/maps/search/?api=1&amp;query=Avenida+9E+%23+6-90%2C+La+Riviera%2C+C%C3%BAcuta%2C+Norte+de+Santander" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 21.5 12 12 21.5 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 14.5v-3h5.5M12.5 9.5l2 2-2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Cómo llegar</a><a class="accion" href="https://wa.me/573208494535?text=Hola%2C+vengo+de+La+Fiesta+de+Todos+y+quiero+saber+cu%C3%A1ndo+se+re%C3%BAnen+en+la+sede+La+Riviera." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1.2-3.6A8 8 0 1 1 8.4 18.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.2 8.6c.3-.5.8-.5 1-.1l.7 1.5c.1.3 0 .6-.2.8l-.4.4c.5 1.1 1.4 2 2.5 2.5l.4-.4c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7-.1 1-.9.6-2 .7-3 .2a8 8 0 0 1-3.4-3.4c-.5-1-.4-2.1.2-3z" fill="currentColor"/></svg>WhatsApp</a><a class="accion" href="tel:+573208494535"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4.1-2 1.3a11 11 0 0 0 6.5 6.5l1.3-2 4.1 1.4v2.6c0 1.1-.9 2-2 2A16.5 16.5 0 0 1 4.6 5.5c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Llamar</a></div>
+      </li>
+      <li class="sede" id="la-libertad" data-nombre="La Libertad" data-lat="7.88531" data-lon="-72.47461" style="--i:2">
+        <h3><button class="ver" type="button" aria-label="Ver La Libertad en el mapa">La Libertad</button></h3>
+        <p class="direccion">Calle 18A # 15-26, Cúcuta</p>
+        <p class="tels"><a href="tel:+573143985683">314 398 5683</a></p>
+        <p class="distancia" hidden></p>
+        <div class="acciones"><a class="accion accion-ir" href="https://www.google.com/maps/search/?api=1&amp;query=Calle+18A+%23+15-26%2C+C%C3%BAcuta%2C+Norte+de+Santander" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 21.5 12 12 21.5 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 14.5v-3h5.5M12.5 9.5l2 2-2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Cómo llegar</a><a class="accion" href="https://wa.me/573143985683?text=Hola%2C+vengo+de+La+Fiesta+de+Todos+y+quiero+saber+cu%C3%A1ndo+se+re%C3%BAnen+en+la+sede+La+Libertad." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1.2-3.6A8 8 0 1 1 8.4 18.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.2 8.6c.3-.5.8-.5 1-.1l.7 1.5c.1.3 0 .6-.2.8l-.4.4c.5 1.1 1.4 2 2.5 2.5l.4-.4c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7-.1 1-.9.6-2 .7-3 .2a8 8 0 0 1-3.4-3.4c-.5-1-.4-2.1.2-3z" fill="currentColor"/></svg>WhatsApp</a><a class="accion" href="tel:+573143985683"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4.1-2 1.3a11 11 0 0 0 6.5 6.5l1.3-2 4.1 1.4v2.6c0 1.1-.9 2-2 2A16.5 16.5 0 0 1 4.6 5.5c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Llamar</a></div>
+      </li>
+      <li class="sede" id="el-llano" data-nombre="El Llano" data-lat="7.88600" data-lon="-72.51220" style="--i:3">
+        <h3><button class="ver" type="button" aria-label="Ver El Llano en el mapa">El Llano</button></h3>
+        <p class="direccion">Calle 9 # 13-72, barrio San Miguel, Cúcuta</p>
+        <p class="tels"><a href="tel:+573112394242">311 239 4242</a> o <a href="tel:+573216114594">321 611 4594</a></p>
+        <p class="distancia" hidden></p>
+        <div class="acciones"><a class="accion accion-ir" href="https://www.google.com/maps/search/?api=1&amp;query=Calle+9+%23+13-72%2C+San+Miguel%2C+C%C3%BAcuta%2C+Norte+de+Santander" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 21.5 12 12 21.5 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 14.5v-3h5.5M12.5 9.5l2 2-2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Cómo llegar</a><a class="accion" href="https://wa.me/573112394242?text=Hola%2C+vengo+de+La+Fiesta+de+Todos+y+quiero+saber+cu%C3%A1ndo+se+re%C3%BAnen+en+la+sede+El+Llano." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1.2-3.6A8 8 0 1 1 8.4 18.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.2 8.6c.3-.5.8-.5 1-.1l.7 1.5c.1.3 0 .6-.2.8l-.4.4c.5 1.1 1.4 2 2.5 2.5l.4-.4c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7-.1 1-.9.6-2 .7-3 .2a8 8 0 0 1-3.4-3.4c-.5-1-.4-2.1.2-3z" fill="currentColor"/></svg>WhatsApp</a><a class="accion" href="tel:+573112394242"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4.1-2 1.3a11 11 0 0 0 6.5 6.5l1.3-2 4.1 1.4v2.6c0 1.1-.9 2-2 2A16.5 16.5 0 0 1 4.6 5.5c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Llamar</a></div>
+      </li>
+      <li class="sede" id="barrio-blanco" data-nombre="Barrio Blanco" data-lat="7.87620" data-lon="-72.49900" style="--i:4">
+        <h3><button class="ver" type="button" aria-label="Ver Barrio Blanco en el mapa">Barrio Blanco</button></h3>
+        <p class="direccion">Calle 21A # 0B-31, barrio El Rosal, Cúcuta</p>
+        <p class="tels"><a href="tel:+573002137915">300 213 7915</a> o <a href="tel:+573188191151">318 819 1151</a></p>
+        <p class="distancia" hidden></p>
+        <div class="acciones"><a class="accion accion-ir" href="https://www.google.com/maps/search/?api=1&amp;query=Calle+21A+%23+0B-31%2C+El+Rosal%2C+C%C3%BAcuta%2C+Norte+de+Santander" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 21.5 12 12 21.5 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 14.5v-3h5.5M12.5 9.5l2 2-2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Cómo llegar</a><a class="accion" href="https://wa.me/573002137915?text=Hola%2C+vengo+de+La+Fiesta+de+Todos+y+quiero+saber+cu%C3%A1ndo+se+re%C3%BAnen+en+la+sede+Barrio+Blanco." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1.2-3.6A8 8 0 1 1 8.4 18.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.2 8.6c.3-.5.8-.5 1-.1l.7 1.5c.1.3 0 .6-.2.8l-.4.4c.5 1.1 1.4 2 2.5 2.5l.4-.4c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7-.1 1-.9.6-2 .7-3 .2a8 8 0 0 1-3.4-3.4c-.5-1-.4-2.1.2-3z" fill="currentColor"/></svg>WhatsApp</a><a class="accion" href="tel:+573002137915"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4.1-2 1.3a11 11 0 0 0 6.5 6.5l1.3-2 4.1 1.4v2.6c0 1.1-.9 2-2 2A16.5 16.5 0 0 1 4.6 5.5c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Llamar</a></div>
+      </li>
+      <li class="sede" id="atalaya" data-nombre="Atalaya" data-lat="7.90670" data-lon="-72.52348" style="--i:5">
+        <h3><button class="ver" type="button" aria-label="Ver Atalaya en el mapa">Atalaya</button></h3>
+        <p class="direccion">Manzana J 5, lote 12, barrio Atalaya, primera etapa, Cúcuta</p>
+        <p class="tels"><a href="tel:+573168549854">316 854 9854</a></p>
+        <p class="distancia" hidden></p>
+        <div class="acciones"><a class="accion accion-ir" href="https://www.google.com/maps/search/?api=1&amp;query=Manzana+J+5+lote+12%2C+Atalaya+primera+etapa%2C+C%C3%BAcuta%2C+Norte+de+Santander" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 21.5 12 12 21.5 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 14.5v-3h5.5M12.5 9.5l2 2-2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Cómo llegar</a><a class="accion" href="https://wa.me/573168549854?text=Hola%2C+vengo+de+La+Fiesta+de+Todos+y+quiero+saber+cu%C3%A1ndo+se+re%C3%BAnen+en+la+sede+Atalaya." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1.2-3.6A8 8 0 1 1 8.4 18.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.2 8.6c.3-.5.8-.5 1-.1l.7 1.5c.1.3 0 .6-.2.8l-.4.4c.5 1.1 1.4 2 2.5 2.5l.4-.4c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7-.1 1-.9.6-2 .7-3 .2a8 8 0 0 1-3.4-3.4c-.5-1-.4-2.1.2-3z" fill="currentColor"/></svg>WhatsApp</a><a class="accion" href="tel:+573168549854"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4.1-2 1.3a11 11 0 0 0 6.5 6.5l1.3-2 4.1 1.4v2.6c0 1.1-.9 2-2 2A16.5 16.5 0 0 1 4.6 5.5c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Llamar</a></div>
+      </li>
+      <li class="sede" id="aeropuerto" data-nombre="Aeropuerto" data-lat="7.93426" data-lon="-72.50285" style="--i:6">
+        <h3><button class="ver" type="button" aria-label="Ver Aeropuerto en el mapa">Aeropuerto</button></h3>
+        <p class="direccion">Av. 1 # 12-06, piso 3, barrio Aeropuerto, Cúcuta</p>
+        <p class="tels"><a href="tel:+573187297441">318 729 7441</a></p>
+        <p class="distancia" hidden></p>
+        <div class="acciones"><a class="accion accion-ir" href="https://www.google.com/maps/search/?api=1&amp;query=Avenida+1+%23+12-06%2C+barrio+Aeropuerto%2C+C%C3%BAcuta%2C+Norte+de+Santander" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 21.5 12 12 21.5 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 14.5v-3h5.5M12.5 9.5l2 2-2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Cómo llegar</a><a class="accion" href="https://wa.me/573187297441?text=Hola%2C+vengo+de+La+Fiesta+de+Todos+y+quiero+saber+cu%C3%A1ndo+se+re%C3%BAnen+en+la+sede+Aeropuerto." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1.2-3.6A8 8 0 1 1 8.4 18.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.2 8.6c.3-.5.8-.5 1-.1l.7 1.5c.1.3 0 .6-.2.8l-.4.4c.5 1.1 1.4 2 2.5 2.5l.4-.4c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7-.1 1-.9.6-2 .7-3 .2a8 8 0 0 1-3.4-3.4c-.5-1-.4-2.1.2-3z" fill="currentColor"/></svg>WhatsApp</a><a class="accion" href="tel:+573187297441"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4.1-2 1.3a11 11 0 0 0 6.5 6.5l1.3-2 4.1 1.4v2.6c0 1.1-.9 2-2 2A16.5 16.5 0 0 1 4.6 5.5c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Llamar</a></div>
+      </li>
+      <li class="sede" id="villa-del-rosario" data-nombre="Villa del Rosario" data-lat="7.83852" data-lon="-72.47145" style="--i:7">
+        <h3><button class="ver" type="button" aria-label="Ver Villa del Rosario en el mapa">Villa del Rosario</button></h3>
+        <p class="direccion">Carrera 8 # 2N-42, barrio Santander, Villa del Rosario</p>
+        <p class="tels"><a href="tel:+573206803629">320 680 3629</a> o <a href="tel:+573168969960">316 896 9960</a></p>
+        <p class="distancia" hidden></p>
+        <div class="acciones"><a class="accion accion-ir" href="https://www.google.com/maps/search/?api=1&amp;query=Carrera+8+%23+2N-42%2C+barrio+Santander%2C+Villa+del+Rosario%2C+Norte+de+Santander" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 21.5 12 12 21.5 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 14.5v-3h5.5M12.5 9.5l2 2-2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Cómo llegar</a><a class="accion" href="https://wa.me/573206803629?text=Hola%2C+vengo+de+La+Fiesta+de+Todos+y+quiero+saber+cu%C3%A1ndo+se+re%C3%BAnen+en+la+sede+Villa+del+Rosario." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1.2-3.6A8 8 0 1 1 8.4 18.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.2 8.6c.3-.5.8-.5 1-.1l.7 1.5c.1.3 0 .6-.2.8l-.4.4c.5 1.1 1.4 2 2.5 2.5l.4-.4c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7-.1 1-.9.6-2 .7-3 .2a8 8 0 0 1-3.4-3.4c-.5-1-.4-2.1.2-3z" fill="currentColor"/></svg>WhatsApp</a><a class="accion" href="tel:+573206803629"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4.1-2 1.3a11 11 0 0 0 6.5 6.5l1.3-2 4.1 1.4v2.6c0 1.1-.9 2-2 2A16.5 16.5 0 0 1 4.6 5.5c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Llamar</a></div>
+      </li>
+      </ol>
+    </section>
+
+    <section class="seccion" aria-labelledby="titulo-lejos">
+      <details class="lejos">
+        <summary><h2 id="titulo-lejos">Más sedes en Norte de Santander</h2><span>Chinácota, Ocaña y Pamplona</span></summary>
+        <ul class="sedes">
+        <li class="sede sede-lejos">
+          <h3>Chinácota</h3>
+          <p class="direccion">Manzana A, lote 1, barrio Betania 4</p>
+          <p class="tels"><a href="tel:+573208868633">320 886 8633</a> o <a href="tel:+573147996023">314 799 6023</a></p>
+          <div class="acciones"><a class="accion accion-ir" href="https://www.google.com/maps/search/?api=1&amp;query=Manzana+A+lote+1%2C+Betania+4%2C+Chin%C3%A1cota%2C+Norte+de+Santander" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 21.5 12 12 21.5 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 14.5v-3h5.5M12.5 9.5l2 2-2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Cómo llegar</a><a class="accion" href="https://wa.me/573208868633?text=Hola%2C+vengo+de+La+Fiesta+de+Todos+y+quiero+saber+cu%C3%A1ndo+se+re%C3%BAnen+en+la+sede+Chin%C3%A1cota." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1.2-3.6A8 8 0 1 1 8.4 18.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.2 8.6c.3-.5.8-.5 1-.1l.7 1.5c.1.3 0 .6-.2.8l-.4.4c.5 1.1 1.4 2 2.5 2.5l.4-.4c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7-.1 1-.9.6-2 .7-3 .2a8 8 0 0 1-3.4-3.4c-.5-1-.4-2.1.2-3z" fill="currentColor"/></svg>WhatsApp</a><a class="accion" href="tel:+573208868633"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4.1-2 1.3a11 11 0 0 0 6.5 6.5l1.3-2 4.1 1.4v2.6c0 1.1-.9 2-2 2A16.5 16.5 0 0 1 4.6 5.5c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Llamar</a></div>
+        </li>
+        <li class="sede sede-lejos">
+          <h3>Centro Ocaña, Ocaña</h3>
+          <p class="direccion">Carrera 13 # 12-56</p>
+          <p class="tels"><a href="tel:+573154952738">315 495 2738</a> o <a href="tel:+573154247109">315 424 7109</a></p>
+          <div class="acciones"><a class="accion accion-ir" href="https://www.google.com/maps/search/?api=1&amp;query=Carrera+13+%23+12-56%2C+Oca%C3%B1a%2C+Norte+de+Santander" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 21.5 12 12 21.5 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 14.5v-3h5.5M12.5 9.5l2 2-2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Cómo llegar</a><a class="accion" href="https://wa.me/573154952738?text=Hola%2C+vengo+de+La+Fiesta+de+Todos+y+quiero+saber+cu%C3%A1ndo+se+re%C3%BAnen+en+la+sede+Centro+Oca%C3%B1a." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1.2-3.6A8 8 0 1 1 8.4 18.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.2 8.6c.3-.5.8-.5 1-.1l.7 1.5c.1.3 0 .6-.2.8l-.4.4c.5 1.1 1.4 2 2.5 2.5l.4-.4c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7-.1 1-.9.6-2 .7-3 .2a8 8 0 0 1-3.4-3.4c-.5-1-.4-2.1.2-3z" fill="currentColor"/></svg>WhatsApp</a><a class="accion" href="tel:+573154952738"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4.1-2 1.3a11 11 0 0 0 6.5 6.5l1.3-2 4.1 1.4v2.6c0 1.1-.9 2-2 2A16.5 16.5 0 0 1 4.6 5.5c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Llamar</a></div>
+        </li>
+        <li class="sede sede-lejos">
+          <h3>Marabel, Ocaña</h3>
+          <p class="direccion">Calle 3A # 27A-95, edificio residencial María Alicia Quintero</p>
+          <p class="tels">No tiene teléfono publicado.</p>
+          <div class="acciones"><a class="accion accion-ir" href="https://www.google.com/maps/search/?api=1&amp;query=Calle+3A+%23+27A-95%2C+Oca%C3%B1a%2C+Norte+de+Santander" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 21.5 12 12 21.5 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 14.5v-3h5.5M12.5 9.5l2 2-2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Cómo llegar</a></div>
+        </li>
+        <li class="sede sede-lejos">
+          <h3>Pamplona</h3>
+          <p class="direccion">Carrera 6 # 6-22, pisos 3 y 4, Calle Real</p>
+          <p class="tels"><a href="tel:+576075688322">(607) 568 8322</a> o <a href="tel:+573203587654">320 358 7654</a></p>
+          <div class="acciones"><a class="accion accion-ir" href="https://www.google.com/maps/search/?api=1&amp;query=Carrera+6+%23+6-22%2C+Pamplona%2C+Norte+de+Santander" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 21.5 12 12 21.5 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 14.5v-3h5.5M12.5 9.5l2 2-2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Cómo llegar</a><a class="accion" href="https://wa.me/573203587654?text=Hola%2C+vengo+de+La+Fiesta+de+Todos+y+quiero+saber+cu%C3%A1ndo+se+re%C3%BAnen+en+la+sede+Pamplona." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5l1.2-3.6A8 8 0 1 1 8.4 18.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.2 8.6c.3-.5.8-.5 1-.1l.7 1.5c.1.3 0 .6-.2.8l-.4.4c.5 1.1 1.4 2 2.5 2.5l.4-.4c.2-.2.5-.3.8-.2l1.5.7c.4.2.4.7-.1 1-.9.6-2 .7-3 .2a8 8 0 0 1-3.4-3.4c-.5-1-.4-2.1.2-3z" fill="currentColor"/></svg>WhatsApp</a><a class="accion" href="tel:+576075688322"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4.1-2 1.3a11 11 0 0 0 6.5 6.5l1.3-2 4.1 1.4v2.6c0 1.1-.9 2-2 2A16.5 16.5 0 0 1 4.6 5.5c0-1.1.9-2 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Llamar</a></div>
+        </li>
+        </ul>
+      </details>
+      <div class="otra-ciudad">
+        <h2>¿Vives en otra ciudad?</h2>
+        <p>ICT tiene sedes en toda Colombia y en otros países.</p>
+        <a class="accion" href="https://soyict.org/donde-estamos/" target="_blank" rel="noopener">Buscar en soyict.org</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie">
+    <button class="compartir" id="compartir" type="button">Compartir esta página</button>
+    <p class="pie-ict"><img src="/img/ict.png" alt="" width="605" height="219">Cruzada Estudiantil y Profesional de Colombia</p>
+    <ul class="redes">
+      <li><a href="https://www.instagram.com/soy_ict/" target="_blank" rel="noopener">Instagram</a></li>
+      <li><a href="https://web.facebook.com/soyict" target="_blank" rel="noopener">Facebook</a></li>
+      <li><a href="https://www.youtube.com/@SoyICT" target="_blank" rel="noopener">YouTube</a></li>
+      <li><a href="https://play.google.com/store/apps/details?id=com.app.soyict" target="_blank" rel="noopener">App ICT Devocional</a></li>
+    </ul>
+    <p class="fuente">Direcciones y teléfonos tomados de soyict.org el 5 de noviembre de 2026. La ubicación en el mapa es aproximada; «Cómo llegar» usa la dirección exacta.</p>
+  </footer>
+
+  <noscript><p class="sin-js">El mapa necesita JavaScript, pero la lista de sedes funciona igual.</p></noscript>
+  <script src="/vendor/leaflet/leaflet.js" defer></script>
+  <script src="/app.js" defer></script>
+</body>
+</html>
