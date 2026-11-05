@@ -666,6 +666,7 @@
       linea1.classList.toggle('visible', p < 0.36);
       linea2.classList.toggle('visible', p >= 0.38 && p < 0.68);
       final.forEach((el) => el.classList.toggle('visible', p >= 0.7));
+      mesa.classList.toggle('final', p >= 0.7);
       const t = suavizar(entre((p - 0.1) / 0.6));
       escena.style.backgroundColor = `rgb(${frio.map((c, k) => Math.round(c + (calido[k] - c) * t)).join(',')})`;
       luz.style.opacity = entre((p - 0.25) / 0.5).toFixed(3);

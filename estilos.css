@@ -364,7 +364,12 @@ h2 { margin: 0; font: 400 clamp(2rem, 8.5vw, 2.6rem)/1.02 var(--display); font-v
 .mesa-platos { opacity: .7; }
 .mesa-borde { stroke-dasharray: 1; stroke-dashoffset: 0; }
 .mesa-velas { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; }
-.mesa-velas li { position: absolute; left: 50%; top: var(--y); }
+.mesa-velas li { position: absolute; left: 50%; top: var(--y); scale: var(--s, 1); } /* más pequeñas al fondo */
+/* la silla de la cabecera, «tu lugar», recibe luz con el final */
+.mesa-silla-luz {
+  position: absolute; left: 50%; top: 85.5%; width: 70%; aspect-ratio: 1.6; translate: -50% -50%; pointer-events: none;
+  border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 214, 140, .38), rgba(242, 181, 68, .1) 60%, transparent);
+}
 .mesa-velas b {
   position: absolute; width: 13px; height: 13px; margin: -8px 0 0 -6.5px; border-radius: 0 50% 50% 50%; transform: rotate(45deg);
   background: radial-gradient(circle at 62% 62%, #fffaf0 0 18%, var(--llama) 34%, var(--vela) 72%);
@@ -391,6 +396,8 @@ h2 { margin: 0; font: 400 clamp(2rem, 8.5vw, 2.6rem)/1.02 var(--display); font-v
 }
 .mesa.viva .mesa-dibujo { grid-area: dibujo; align-self: center; height: min(68dvh, 600px); }
 .mesa.viva .mesa-luz { opacity: 0; }
+.mesa.viva .mesa-silla-luz { opacity: 0; transition: opacity .9s var(--ease-out); }
+.mesa.viva.final .mesa-silla-luz { opacity: 1; }
 .mesa.viva .mesa-borde { stroke-dashoffset: calc(1 - var(--trazo, 0)); }
 /* la silueta de la mesa ya se adivina en la penumbra antes de que llegue la luz */
 .mesa.viva .mesa-sillas { opacity: calc(.14 + var(--aparece, 0) * .36); }
